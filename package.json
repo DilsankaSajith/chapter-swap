@@ -1,0 +1,22 @@
+{
+  "name": "chapterswap",
+  "version": "1.0.0",
+  "description": "Books Sharing Web Application",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "client": "npm start --prefix frontend",
+    "server": "nodemon backend/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "OakShade",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
+  }
+}

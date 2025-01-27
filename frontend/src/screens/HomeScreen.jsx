@@ -52,7 +52,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getBooks();
-  }, []);
+  }, [books]);
 
   return (
     <>

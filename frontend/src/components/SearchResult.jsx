@@ -1,11 +1,30 @@
 import { Flex, Image, VStack, Text, Button, useToast } from "@chakra-ui/react";
-import React from "react";
+import axios from "axios";
 
 const SearchResult = ({ searchedBook, onClose }) => {
   const toast = useToast();
 
-  const createBook = () => {
-    console.log(searchedBook);
+  const newBook = {
+    isbn: searchedBook.volumeInfo.industryIdentifiers?.[0].identifier,
+    title: searchedBook.volumeInfo.title,
+    author: searchedBook.volumeInfo.authors?.[0],
+    description: searchedBook.volumeInfo.description,
+    image: searchedBook.volumeInfo.imageLinks?.thumbnail,
+    category: searchedBook.volumeInfo.categories?.[0],
+  };
+
+  const createBook = async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      await axios.post("/api/books", newBook, config);
+    } catch (error) {
+      console.log(error.message);
+    }
     toast({
       title: "Book added.",
       status: "success",
@@ -29,7 +48,7 @@ const SearchResult = ({ searchedBook, onClose }) => {
         />
         <VStack alignItems="flex-start" gap="1px">
           <Text fontWeight="medium">{searchedBook.volumeInfo.title}</Text>
-          <Text color="gray.500">{searchedBook.volumeInfo.authors}</Text>
+          <Text color="gray.500">{searchedBook.volumeInfo.authors?.[0]}</Text>
         </VStack>
       </Flex>
       <Button colorScheme="blue" mr="8px" onClick={createBook}>

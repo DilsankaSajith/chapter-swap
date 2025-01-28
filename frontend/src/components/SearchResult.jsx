@@ -1,7 +1,17 @@
-import { Flex, Image, VStack, Text, Button, useToast } from "@chakra-ui/react";
-import axios from "axios";
+import {
+  Flex,
+  Image,
+  VStack,
+  Text,
+  Button,
+  useToast,
+  Spinner,
+} from "@chakra-ui/react";
+import { useCreateBookMutation } from "../slices/booksApiSlice";
 
 const SearchResult = ({ searchedBook, onClose }) => {
+  const [createBookAPI, { isLoading: loadingCreate }] = useCreateBookMutation();
+
   const toast = useToast();
 
   const newBook = {
@@ -14,17 +24,7 @@ const SearchResult = ({ searchedBook, onClose }) => {
   };
 
   const createBook = async () => {
-    try {
-      const config = {
-        headers: {
-          "Content-type": "application/json",
-        },
-      };
-
-      await axios.post("/api/books", newBook, config);
-    } catch (error) {
-      console.log(error.message);
-    }
+    await createBookAPI(newBook);
     toast({
       title: "Book added.",
       status: "success",
@@ -52,7 +52,7 @@ const SearchResult = ({ searchedBook, onClose }) => {
         </VStack>
       </Flex>
       <Button colorScheme="blue" mr="8px" onClick={createBook}>
-        Add
+        {loadingCreate ? <Spinner /> : <Text>Add</Text>}
       </Button>
     </Flex>
   );

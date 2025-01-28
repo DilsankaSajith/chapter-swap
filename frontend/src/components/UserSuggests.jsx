@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Spacer,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Avatar, Button, Flex, Text, VStack } from "@chakra-ui/react";
 
 const UserSuggests = () => {
   return (

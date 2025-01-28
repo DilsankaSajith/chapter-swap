@@ -5,7 +5,7 @@ import Book from "../models/bookModel.js";
 // @access  Public
 export const getBooks = async (req, res) => {
   try {
-    const books = await Book.find({});
+    const books = await Book.find({}).sort({ createdAt: -1 });
 
     res.status(200).json(books);
   } catch (error) {

@@ -26,20 +26,17 @@ import axios from "axios";
 import UserSuggests from "../components/UserSuggests";
 import Book from "../components/Book";
 import SearchResult from "../components/SearchResult";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGetBooksQuery } from "../slices/booksApiSlice";
 
 const HomeScreen = () => {
-  const [books, setBooks] = useState([]);
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingApi, setIsLoadingApi] = useState(false);
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { data: books, isLoading, error } = useGetBooksQuery();
 
-  const getBooks = async () => {
-    const { data } = await axios.get("/api/books");
-    setBooks(data);
-  };
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const getSearchedBooks = async () => {
     setIsLoadingApi(true);
@@ -49,10 +46,6 @@ const HomeScreen = () => {
     setIsLoadingApi(false);
     setSearchedBooks(data.items);
   };
-
-  useEffect(() => {
-    getBooks();
-  }, [books]);
 
   return (
     <>
@@ -105,42 +98,48 @@ const HomeScreen = () => {
           )}
         </ModalContent>
       </Modal>
-      <Box>
-        <Flex alignItems="center" justifyContent="space-between" mb="3">
-          <Heading as="h2" fontWeight="medium">
-            Latest Books
-          </Heading>
-          <Flex
-            alignItems="center"
-            justifyContent="center"
-            width="50px"
-            height="50px"
-            bg="gray.dark"
-            borderRadius="full"
-            cursor="pointer"
-            _hover={{ bg: "gray.700" }}
-            transition="ease 0.1s"
-            onClick={onOpen}
-          >
-            <FaPlus className="nav-icon" />
+      {isLoading ? (
+        <Spinner p="24px" m="64px" />
+      ) : error ? (
+        <Text>{error.data?.message}</Text>
+      ) : (
+        <Box>
+          <Flex alignItems="center" justifyContent="space-between" mb="3">
+            <Heading as="h2" fontWeight="medium">
+              Latest Books
+            </Heading>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              width="50px"
+              height="50px"
+              bg="gray.dark"
+              borderRadius="full"
+              cursor="pointer"
+              _hover={{ bg: "gray.700" }}
+              transition="ease 0.1s"
+              onClick={onOpen}
+            >
+              <FaPlus className="nav-icon" />
+            </Flex>
           </Flex>
-        </Flex>
-        <Input mb="6" placeholder="Search a book..." />
+          <Input mb="6" placeholder="Search a book..." />
 
-        <Grid templateColumns="repeat(6, 1fr)" gap="32px">
-          <GridItem colSpan={{ base: 6, lg: 4 }}>
-            <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
-              {books.map((book) => (
-                <Book key={book.id} book={book} />
-              ))}
-            </SimpleGrid>
-          </GridItem>
+          <Grid templateColumns="repeat(6, 1fr)" gap="32px">
+            <GridItem colSpan={{ base: 6, lg: 4 }}>
+              <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
+                {books.map((book) => (
+                  <Book key={book.id} book={book} />
+                ))}
+              </SimpleGrid>
+            </GridItem>
 
-          <GridItem as="aside" colSpan={{ base: 6, lg: 2 }}>
-            <UserSuggests />
-          </GridItem>
-        </Grid>
-      </Box>
+            <GridItem as="aside" colSpan={{ base: 6, lg: 2 }}>
+              <UserSuggests />
+            </GridItem>
+          </Grid>
+        </Box>
+      )}
     </>
   );
 };

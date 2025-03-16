@@ -8,11 +8,16 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useCreateBookMutation } from "../slices/booksApiSlice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SearchResult = ({ searchedBook, onClose }) => {
   const [createBookAPI, { isLoading: loadingCreate }] = useCreateBookMutation();
 
   const toast = useToast();
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector((store) => store.auth);
 
   const newBook = {
     isbn: searchedBook.volumeInfo.industryIdentifiers?.[0].identifier,
@@ -24,9 +29,20 @@ const SearchResult = ({ searchedBook, onClose }) => {
   };
 
   const createBook = async () => {
+    if (!userInfo) {
+      toast({
+        title: "You have to sign in to perform this action",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/login");
+      return;
+    }
+
     await createBookAPI(newBook);
     toast({
-      title: "Book added.",
+      title: "Book added",
       status: "success",
       duration: 3000,
       isClosable: true,

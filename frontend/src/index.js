@@ -14,6 +14,10 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { mode } from "@chakra-ui/theme-tools";
 import "./index.css";
 import HomeScreen from "./screens/HomeScreen.jsx";
+import LoginScreen from "./screens/LoginScreen.jsx";
+import RegisterScreen from "./screens/RegisterScreen.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import ProfileScreen from "./screens/ProfileScreen.jsx";
 
 const styles = {
   global: (props) => ({
@@ -26,13 +30,17 @@ const styles = {
 
 const config = {
   initialColorMode: "dark",
-  useSystemColorMode: false,
+  useSystemColorMode: true,
 };
 
 const colors = {
   gray: {
-    light: "#616161",
-    dark: "#1e1e1e",
+    light: "#2A3035",
+    dark: "#161C23",
+  },
+  accent: {
+    default: "#20B46A",
+    event: "#0BEA7A",
   },
 };
 
@@ -42,6 +50,12 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />}></Route>
+      <Route path="/login" element={<LoginScreen />}></Route>
+      <Route path="/register" element={<RegisterScreen />}></Route>
+
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<ProfileScreen />}></Route>
+      </Route>
     </Route>
   )
 );

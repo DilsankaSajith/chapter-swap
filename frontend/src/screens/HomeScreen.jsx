@@ -65,9 +65,12 @@ const HomeScreen = () => {
 
           <ModalFooter>
             <Button
-              colorScheme="green"
+              bg="accent.default"
+              _hover={{ bg: "accent.event" }}
+              color="black"
               width="full"
               onClick={() => getSearchedBooks()}
+              borderRadius="sm"
             >
               Search
             </Button>
@@ -93,7 +96,7 @@ const HomeScreen = () => {
             </Box>
           ) : (
             <Text py="16px" px="24px">
-              Search some books
+              Search for a book
             </Text>
           )}
         </ModalContent>
@@ -105,19 +108,20 @@ const HomeScreen = () => {
       ) : (
         <Box>
           <Flex alignItems="center" justifyContent="space-between" mb="3">
-            <Heading as="h2" fontWeight="medium">
+            <Text fontSize="3xl" fontWeight="medium" mb={8}>
               Latest Books
-            </Heading>
+            </Text>
             <Flex
               alignItems="center"
               justifyContent="center"
               width="50px"
               height="50px"
-              bg="gray.dark"
+              bg="accent.default"
               borderRadius="full"
               cursor="pointer"
-              _hover={{ bg: "gray.700" }}
-              transition="ease 0.1s"
+              _hover={{ bg: "accent.event" }}
+              color="black"
+              transition="ease 0.2s"
               onClick={onOpen}
             >
               <FaPlus className="nav-icon" />

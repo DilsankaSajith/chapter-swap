@@ -6,7 +6,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <Container maxWidth="4xl" my="8">
+      <Container maxWidth="6xl" my="8">
         <Outlet />
       </Container>
     </>

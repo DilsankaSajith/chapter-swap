@@ -26,20 +26,21 @@ import axios from "axios";
 import UserSuggests from "../components/UserSuggests";
 import Book from "../components/Book";
 import SearchResult from "../components/SearchResult";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGetBooksQuery } from "../slices/booksApiSlice";
+import { useParams } from "react-router-dom";
+import SearchBox from "../components/SearchBox";
 
 const HomeScreen = () => {
-  const [books, setBooks] = useState([]);
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingApi, setIsLoadingApi] = useState(false);
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { keyword } = useParams();
 
-  const getBooks = async () => {
-    const { data } = await axios.get("/api/books");
-    setBooks(data);
-  };
+  const { data: books, isLoading, error } = useGetBooksQuery({ keyword });
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const getSearchedBooks = async () => {
     setIsLoadingApi(true);
@@ -49,10 +50,6 @@ const HomeScreen = () => {
     setIsLoadingApi(false);
     setSearchedBooks(data.items);
   };
-
-  useEffect(() => {
-    getBooks();
-  }, []);
 
   return (
     <>
@@ -72,9 +69,12 @@ const HomeScreen = () => {
 
           <ModalFooter>
             <Button
-              colorScheme="green"
+              bg="accent.default"
+              _hover={{ bg: "accent.event" }}
+              color="black"
               width="full"
               onClick={() => getSearchedBooks()}
+              borderRadius="sm"
             >
               Search
             </Button>
@@ -100,47 +100,54 @@ const HomeScreen = () => {
             </Box>
           ) : (
             <Text py="16px" px="24px">
-              Search some books
+              Search for a book
             </Text>
           )}
         </ModalContent>
       </Modal>
-      <Box>
-        <Flex alignItems="center" justifyContent="space-between" mb="3">
-          <Heading as="h2" fontWeight="medium">
-            Latest Books
-          </Heading>
-          <Flex
-            alignItems="center"
-            justifyContent="center"
-            width="50px"
-            height="50px"
-            bg="gray.dark"
-            borderRadius="full"
-            cursor="pointer"
-            _hover={{ bg: "gray.700" }}
-            transition="ease 0.1s"
-            onClick={onOpen}
-          >
-            <FaPlus className="nav-icon" />
+      {isLoading ? (
+        <Spinner p="24px" m="64px" />
+      ) : error ? (
+        <Text>{error.data?.message}</Text>
+      ) : (
+        <Box>
+          <Flex alignItems="center" justifyContent="space-between" mb="3">
+            <Text fontSize="3xl" fontWeight="medium" mb={8}>
+              Latest Books
+            </Text>
+            <Flex
+              alignItems="center"
+              justifyContent="center"
+              width="50px"
+              height="50px"
+              bg="accent.default"
+              borderRadius="full"
+              cursor="pointer"
+              _hover={{ bg: "accent.event" }}
+              color="black"
+              transition="ease 0.2s"
+              onClick={onOpen}
+            >
+              <FaPlus className="nav-icon" />
+            </Flex>
           </Flex>
-        </Flex>
-        <Input mb="6" placeholder="Search a book..." />
+          <SearchBox />
 
-        <Grid templateColumns="repeat(6, 1fr)" gap="32px">
-          <GridItem colSpan={{ base: 6, lg: 4 }}>
-            <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
-              {books.map((book) => (
-                <Book key={book.id} book={book} />
-              ))}
-            </SimpleGrid>
-          </GridItem>
+          <Grid templateColumns="repeat(6, 1fr)" gap="32px">
+            <GridItem colSpan={{ base: 6, lg: 4 }}>
+              <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
+                {books.map((book) => (
+                  <Book key={book.id} book={book} />
+                ))}
+              </SimpleGrid>
+            </GridItem>
 
-          <GridItem as="aside" colSpan={{ base: 6, lg: 2 }}>
-            <UserSuggests />
-          </GridItem>
-        </Grid>
-      </Box>
+            <GridItem as="aside" colSpan={{ base: 6, lg: 2 }}>
+              <UserSuggests />
+            </GridItem>
+          </Grid>
+        </Box>
+      )}
     </>
   );
 };

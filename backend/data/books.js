@@ -1,8 +1,6 @@
 export const books = [
   {
-    id: 1,
     isbn: "0316149659",
-    user: "675b2f4414289f4ea95b40a3",
     title: "The Last Wish",
     author: "Andrzej Sapkowski",
     description:
@@ -15,9 +13,7 @@ export const books = [
     requested: false,
   },
   {
-    id: 2,
     isbn: "9781101931301",
-    user: "675b2f4414289f4ea95b40a3",
     title: "Tess of the Road",
     author: "Rachel Hartman",
     description:
@@ -30,9 +26,7 @@ export const books = [
     requested: false,
   },
   {
-    id: 3,
     isbn: "9781593279509",
-    user: "675b2f4414289f4ea95b40a3",
     title: "Eloquent JavaScript, 3rd Edition",
     author: "Marijn Haverbeke",
     description:

@@ -1,13 +1,48 @@
-import { Flex, Image, VStack, Text, Button, useToast } from "@chakra-ui/react";
-import React from "react";
+import {
+  Flex,
+  Image,
+  VStack,
+  Text,
+  Button,
+  useToast,
+  Spinner,
+} from "@chakra-ui/react";
+import { useCreateBookMutation } from "../slices/booksApiSlice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const SearchResult = ({ searchedBook, onClose }) => {
-  const toast = useToast();
+  const [createBookAPI, { isLoading: loadingCreate }] = useCreateBookMutation();
 
-  const createBook = () => {
-    console.log(searchedBook);
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const { userInfo } = useSelector((store) => store.auth);
+
+  const newBook = {
+    isbn: searchedBook.volumeInfo.industryIdentifiers?.[0].identifier,
+    title: searchedBook.volumeInfo.title,
+    author: searchedBook.volumeInfo.authors?.[0],
+    description: searchedBook.volumeInfo.description,
+    image: searchedBook.volumeInfo.imageLinks?.thumbnail,
+    category: searchedBook.volumeInfo.categories?.[0],
+  };
+
+  const createBook = async () => {
+    if (!userInfo) {
+      toast({
+        title: "You have to sign in to perform this action",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate("/login");
+      return;
+    }
+
+    await createBookAPI(newBook);
     toast({
-      title: "Book added.",
+      title: "Book added",
       status: "success",
       duration: 3000,
       isClosable: true,
@@ -29,10 +64,19 @@ const SearchResult = ({ searchedBook, onClose }) => {
         />
         <VStack alignItems="flex-start" gap="1px">
           <Text fontWeight="medium">{searchedBook.volumeInfo.title}</Text>
-          <Text color="gray.500">{searchedBook.volumeInfo.authors}</Text>
+          <Text color="gray.500">{searchedBook.volumeInfo.authors?.[0]}</Text>
         </VStack>
       </Flex>
-      <Button colorScheme="blue" mr="8px" onClick={createBook}>
+      <Button
+        borderRadius="sm"
+        size="sm"
+        bg="accent.default"
+        _hover={{ bg: "accent.event" }}
+        color="black"
+        mr="8px"
+        onClick={createBook}
+        isLoading={loadingCreate}
+      >
         Add
       </Button>
     </Flex>

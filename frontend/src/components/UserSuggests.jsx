@@ -1,6 +1,12 @@
-import { Avatar, Box, Button, Flex, Text, VStack } from "@chakra-ui/react";
+import { Box, Spinner, Text, VStack } from "@chakra-ui/react";
+import FollowUser from "./FollowUser";
+import { useGetAllUsersQuery } from "../slices/usersApiSlice";
+import { useSelector } from "react-redux";
 
 const UserSuggests = () => {
+  const { userInfo } = useSelector((store) => store.auth);
+  const { data: users, isLoading, error } = useGetAllUsersQuery();
+
   return (
     <Box
       bg="gray.dark"
@@ -13,38 +19,17 @@ const UserSuggests = () => {
         Follow Users
       </Text>
 
-      <VStack gap="16px">
-        <Flex alignItems="center" justifyContent="space-between" width="full">
-          <Flex alignItems="center" gap="8px">
-            <Avatar src="/images/user.jpg" size="sm" />
-            <Text>Jane Doe</Text>
-          </Flex>
-          <Button
-            borderRadius="sm"
-            size="sm"
-            bg="accent.default"
-            _hover={{ bg: "accent.event" }}
-            color="black"
-          >
-            Follow
-          </Button>
-        </Flex>
-        <Flex alignItems="center" justifyContent="space-between" width="full">
-          <Flex alignItems="center" gap="8px">
-            <Avatar src="/images//user.jpg" size="sm" />
-            <Text>Jane Doe</Text>
-          </Flex>
-          <Button
-            borderRadius="sm"
-            size="sm"
-            bg="accent.default"
-            _hover={{ bg: "accent.event" }}
-            color="black"
-          >
-            Follow
-          </Button>
-        </Flex>
-      </VStack>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <VStack gap="16px">
+          {users
+            .filter((user) => user._id !== userInfo?._id)
+            .map((user) => (
+              <FollowUser key={user._id} user={user} />
+            ))}
+        </VStack>
+      )}
     </Box>
   );
 };

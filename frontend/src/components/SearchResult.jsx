@@ -67,8 +67,17 @@ const SearchResult = ({ searchedBook, onClose }) => {
           <Text color="gray.500">{searchedBook.volumeInfo.authors?.[0]}</Text>
         </VStack>
       </Flex>
-      <Button colorScheme="blue" mr="8px" onClick={createBook}>
-        {loadingCreate ? <Spinner /> : <Text>Add</Text>}
+      <Button
+        borderRadius="sm"
+        size="sm"
+        bg="accent.default"
+        _hover={{ bg: "accent.event" }}
+        color="black"
+        mr="8px"
+        onClick={createBook}
+        isLoading={loadingCreate}
+      >
+        Add
       </Button>
     </Flex>
   );

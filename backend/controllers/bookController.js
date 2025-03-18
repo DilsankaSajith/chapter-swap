@@ -5,7 +5,11 @@ import Book from "../models/bookModel.js";
 // @route   GET /api/books
 // @access  Public
 export const getBooks = asyncHandler(async (req, res) => {
-  const books = await Book.find({}).sort({ createdAt: -1 });
+  const keyword = req.query.keyword
+    ? { title: { $regex: req.query.keyword, $options: "i" } }
+    : {};
+
+  const books = await Book.find({ ...keyword }).sort({ createdAt: -1 });
   res.status(200).json(books);
 });
 
@@ -19,12 +23,14 @@ export const createBook = asyncHandler(async (req, res) => {
   res.status(201).json(createdBook);
 });
 
-// @desc    Fetch a product
+// @desc    Fetch a book
 // @route   GET /api/books/:id
 // @access  Public
-
 export const getBookById = asyncHandler(async (req, res) => {
-  const book = await Book.findById(req.params.id);
+  const book = await Book.findById(req.params.id).populate(
+    "user",
+    "_id name profilePicture"
+  );
 
   if (book) {
     return res.json(book);
@@ -37,7 +43,6 @@ export const getBookById = asyncHandler(async (req, res) => {
 // @desc    Update a book
 // @route   PUT /api/books/:id
 // @access  Private
-
 export const updateBook = asyncHandler(async (req, res) => {
   const { title, author, description, category } = req.body;
 
@@ -60,7 +65,6 @@ export const updateBook = asyncHandler(async (req, res) => {
 // @desc    Delete a book
 // @route   DELETE /api/books/:id
 // @access  Private
-
 export const deleteBook = asyncHandler(async (req, res) => {
   const book = await Book.findById(req.params.id);
 

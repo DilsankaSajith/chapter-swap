@@ -68,7 +68,6 @@ export const logout = asyncHandler(async (req, res) => {
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
-
 export const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
 
@@ -83,7 +82,6 @@ export const getUserProfile = asyncHandler(async (req, res) => {
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
-
 export const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -107,4 +105,57 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("User not found");
   }
+});
+
+// @desc    Follow a user
+// @route   PUT /api/users/:id/follow
+// @access  Private
+export const followUser = asyncHandler(async (req, res) => {
+  if (req.user._id !== req.params.id) {
+    const user = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (!user.followers.includes(req.user._id)) {
+      await user.updateOne({ $push: { followers: req.user._id } });
+      await currentUser.updateOne({ $push: { follwings: user._id } });
+      res.status(200).json({ message: "User has been followed" });
+    } else {
+      res.status(403);
+      throw new Error("You already followed this user");
+    }
+  } else {
+    res.status(403);
+    throw new Error("You cant follow yourself");
+  }
+});
+
+// @desc    Unfollow a user
+// @route   PUT /api/users/:id/unfollow
+// @access  Private
+export const unfollowUser = asyncHandler(async (req, res) => {
+  if (req.user._id !== req.params.id) {
+    const user = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.user._id);
+
+    if (user.followers.includes(req.user._id)) {
+      await user.updateOne({ $pull: { followers: req.user._id } });
+      await currentUser.updateOne({ $pull: { follwings: user._id } });
+      res.status(200).json({ message: "User has been unfollowed" });
+    } else {
+      res.status(403);
+      throw new Error("You do not follow this user");
+    }
+  } else {
+    res.status(403);
+    throw new Error("You cant unfollow yourself");
+  }
+});
+
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Public
+
+export const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.status(200).json(users);
 });

@@ -38,6 +38,27 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ["User"],
       keepUnusedDataFor: 5,
     }),
+    getAllUsers: builder.query({
+      query: () => ({
+        url: USERS_URL,
+      }),
+      providesTags: ["User"],
+      keepUnusedDataFor: 5,
+    }),
+    followUser: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}/follow`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["User"],
+    }),
+    unfollowUser: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}/unfollow`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -47,4 +68,7 @@ export const {
   useRegisterMutation,
   useProfileMutation,
   useMyProfileQuery,
+  useGetAllUsersQuery,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
 } = usersApiSlice;

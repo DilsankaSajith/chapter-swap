@@ -30,11 +30,7 @@ const ProfileScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
 
   const { data: books, isLoading, error, refetch } = useGetBooksQuery();
-  const {
-    data: user,
-    isLoading: loadingUser,
-    error: errorUserLoading,
-  } = useMyProfileQuery();
+  const { data: user, isLoading: loadingUser } = useMyProfileQuery();
   const [updateProfile, { isLoading: loadingUpdate }] = useProfileMutation();
 
   const [name, setName] = useState(userInfo.name);
@@ -161,7 +157,7 @@ const ProfileScreen = () => {
               <Avatar
                 size="2xl"
                 name="Segun Adebayo"
-                src="/images/user-me.jpg"
+                src={user.profilePicture}
                 mb={3}
               />
               <EditProfileButton />
@@ -185,25 +181,25 @@ const ProfileScreen = () => {
                 |
               </Text>
               <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">12</Text>
+                <Text fontSize="2xl">{user.followers.length}</Text>
                 <Text>Followers</Text>
               </VStack>
               <Text fontSize="3xl" fontWeight="thin">
                 |
               </Text>
               <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">09</Text>
+                <Text fontSize="2xl">{user.follwings.length}</Text>
                 <Text>Followings</Text>
               </VStack>
             </HStack>
 
             <Button
-              bg="#2da44e"
+              bg="accent.default"
               width="full"
-              color="white"
+              color="#000000"
               size="sm"
               mt={8}
-              _hover={{ bg: "#2c974b" }}
+              _hover={{ bg: "accent.event" }}
               onClick={onOpen}
             >
               Edit Details

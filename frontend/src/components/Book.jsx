@@ -21,9 +21,14 @@ import {
   Input,
   Textarea,
   VStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
+import { HiMiniCog6Tooth } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { useDeleteBookMutation } from "../slices/booksApiSlice";
 import { useState } from "react";
@@ -94,7 +99,7 @@ const Book = ({ book }) => {
   };
 
   return (
-    <Box>
+    <Box position="relative">
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.dark">
@@ -151,7 +156,7 @@ const Book = ({ book }) => {
         </ModalContent>
       </Modal>
 
-      <Link to="/book/bookId">
+      <Link to={`/book/${book._id}`}>
         <Card
           maxW="sm"
           minH="350px"
@@ -188,29 +193,44 @@ const Book = ({ book }) => {
         </Card>
       </Link>
       {userInfo?._id === book.user && (
-        <Stack direction="row" spacing={0} width="full">
-          <Button
-            size="xs"
-            borderRadius="0"
-            colorScheme="orange"
-            variant="solid"
-            width="full"
-            onClick={onOpen}
-          >
-            <FaEdit />
-          </Button>
-          <Button
-            size="xs"
-            borderRadius="0"
-            colorScheme="red"
-            variant="solid"
-            width="full"
+        <Stack direction="row" position="absolute" top={2} right={2}>
+          <Menu>
+            <MenuButton>
+              <Flex
+                alignItems="center"
+                justifyContent="center"
+                width="36px"
+                height="36px"
+                bg="accent.default"
+                borderRadius="full"
+                cursor="pointer"
+                _hover={{ bg: "accent.event" }}
+                transition="ease 0.3s"
+                color="#000"
+                boxShadow="2xl"
+              >
+                <HiMiniCog6Tooth className="nav-icon" />
+              </Flex>
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={onOpen}>Edit</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  deleteHandler(book._id);
+                }}
+              >
+                {loadingDelete ? <Spinner /> : "Delete"}
+              </MenuItem>
+            </MenuList>
+          </Menu>
+
+          {/* <Button
             onClick={() => {
               deleteHandler(book._id);
             }}
           >
             {loadingDelete ? <Spinner /> : <FaTrash />}
-          </Button>
+          </Button> */}
         </Stack>
       )}
     </Box>

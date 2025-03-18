@@ -28,13 +28,17 @@ import Book from "../components/Book";
 import SearchResult from "../components/SearchResult";
 import { useState } from "react";
 import { useGetBooksQuery } from "../slices/booksApiSlice";
+import { useParams } from "react-router-dom";
+import SearchBox from "../components/SearchBox";
 
 const HomeScreen = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoadingApi, setIsLoadingApi] = useState(false);
 
-  const { data: books, isLoading, error } = useGetBooksQuery();
+  const { keyword } = useParams();
+
+  const { data: books, isLoading, error } = useGetBooksQuery({ keyword });
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -127,7 +131,7 @@ const HomeScreen = () => {
               <FaPlus className="nav-icon" />
             </Flex>
           </Flex>
-          <Input mb="6" placeholder="Search a book..." />
+          <SearchBox />
 
           <Grid templateColumns="repeat(6, 1fr)" gap="32px">
             <GridItem colSpan={{ base: 6, lg: 4 }}>

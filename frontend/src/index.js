@@ -18,6 +18,7 @@ import LoginScreen from "./screens/LoginScreen.jsx";
 import RegisterScreen from "./screens/RegisterScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
+import BookScreen from "./screens/BookScreen.jsx";
 
 const styles = {
   global: (props) => ({
@@ -41,6 +42,7 @@ const colors = {
   accent: {
     default: "#20B46A",
     event: "#0BEA7A",
+    light: "#0ffc85",
   },
 };
 
@@ -50,8 +52,10 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route index={true} path="/" element={<HomeScreen />}></Route>
+      <Route path="/search/:keyword" element={<HomeScreen />}></Route>
       <Route path="/login" element={<LoginScreen />}></Route>
       <Route path="/register" element={<RegisterScreen />}></Route>
+      <Route path="/book/:id" element={<BookScreen />}></Route>
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />}></Route>

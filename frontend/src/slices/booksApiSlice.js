@@ -4,8 +4,11 @@ import { BOOKS_URL } from "../constants";
 export const booksApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => ({
+      query: ({ keyword }) => ({
         url: BOOKS_URL,
+        params: {
+          keyword,
+        },
       }),
       keepUnusedDataFor: 5,
       providesTags: ["Book"],

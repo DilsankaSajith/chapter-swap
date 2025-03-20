@@ -19,6 +19,9 @@ import RegisterScreen from "./screens/RegisterScreen.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import ProfileScreen from "./screens/ProfileScreen.jsx";
 import BookScreen from "./screens/BookScreen.jsx";
+import BookRequestsScreen from "./screens/BookRequestsScreen.jsx";
+import MyRequestsScreen from "./screens/MyRequestsScreen.jsx";
+import RequestScreen from "./screens/RequestScreen.jsx";
 
 const styles = {
   global: (props) => ({
@@ -44,6 +47,10 @@ const colors = {
     event: "#0BEA7A",
     light: "#0ffc85",
   },
+  danger: {
+    default: "#B42020",
+    event: "#EA120B",
+  },
 };
 
 const theme = extendTheme({ config, styles, colors });
@@ -59,6 +66,9 @@ const router = createBrowserRouter(
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />}></Route>
+        <Route path="/bookRequests" element={<BookRequestsScreen />}></Route>
+        <Route path="/myRequests" element={<MyRequestsScreen />}></Route>
+        <Route path="/requests/:id" element={<RequestScreen />}></Route>
       </Route>
     </Route>
   )

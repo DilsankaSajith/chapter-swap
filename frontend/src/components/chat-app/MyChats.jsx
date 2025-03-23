@@ -6,6 +6,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import ChatLoading from "./ChatLoading";
 import { useSelector } from "react-redux";
 import { getSender } from "../../utils/helpers";
+import GroupChatModel from "./GroupChatModel";
 
 const MyChats = () => {
   const { selectedChat, setSelectedChat, chats, setChats } = ChatState();
@@ -39,16 +40,18 @@ const MyChats = () => {
         <Text fontSize="2xl" fontWeight="medium">
           Chats
         </Text>
-        <Button
-          borderRadius="sm"
-          size="sm"
-          bg="accent.default"
-          _hover={{ bg: "accent.event" }}
-          color="black"
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupChatModel>
+          <Button
+            borderRadius="sm"
+            size="sm"
+            bg="accent.default"
+            _hover={{ bg: "accent.event" }}
+            color="black"
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupChatModel>
       </Box>
 
       <Box display="flex" flexDir="column" w="100%" h="100%" overflowY="hidden">

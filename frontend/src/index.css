@@ -18,3 +18,7 @@
   font-weight: 600;
   padding-left: 0.5rem;
 }
+
+::-webkit-scrollbar {
+  width: 0px;
+}

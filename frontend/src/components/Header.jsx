@@ -57,6 +57,7 @@ const Header = () => {
                 cursor="pointer"
                 _hover={{ bg: "gray.700" }}
                 transition="ease 0.3s"
+                onClick={() => navigate("/chats")}
               >
                 <FaFacebookMessenger className="nav-icon" />
               </Flex>

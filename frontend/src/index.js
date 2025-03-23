@@ -22,6 +22,8 @@ import BookScreen from "./screens/BookScreen.jsx";
 import BookRequestsScreen from "./screens/BookRequestsScreen.jsx";
 import MyRequestsScreen from "./screens/MyRequestsScreen.jsx";
 import RequestScreen from "./screens/RequestScreen.jsx";
+import ChatScreen from "./screens/ChatScreen.jsx";
+import ChatProvider from "./context/ChatProvider.js";
 
 const styles = {
   global: (props) => ({
@@ -69,6 +71,7 @@ const router = createBrowserRouter(
         <Route path="/bookRequests" element={<BookRequestsScreen />}></Route>
         <Route path="/myRequests" element={<MyRequestsScreen />}></Route>
         <Route path="/requests/:id" element={<RequestScreen />}></Route>
+        <Route path="/chats" element={<ChatScreen />}></Route>
       </Route>
     </Route>
   )
@@ -76,11 +79,11 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <ChatProvider>
     <ChakraProvider theme={theme}>
       <Provider store={store}>
         <RouterProvider router={router} />
       </Provider>
     </ChakraProvider>
-  </React.StrictMode>
+  </ChatProvider>
 );

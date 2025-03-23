@@ -174,8 +174,8 @@ const ProfileScreen = () => {
 
             <HStack alignItems="center" gap={4} my={6}>
               <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">42</Text>
-                <Text>Books</Text>
+                <Text fontSize="2xl">{user.points}</Text>
+                <Text>Points</Text>
               </VStack>
               <Text fontSize="3xl" fontWeight="thin">
                 |

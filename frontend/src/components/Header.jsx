@@ -57,6 +57,7 @@ const Header = () => {
                 cursor="pointer"
                 _hover={{ bg: "gray.700" }}
                 transition="ease 0.3s"
+                onClick={() => navigate("/chats")}
               >
                 <FaFacebookMessenger className="nav-icon" />
               </Flex>
@@ -73,7 +74,11 @@ const Header = () => {
               >
                 <FaBell className="nav-icon" />
               </Flex>
-              <Avatar size="sm" src="/images/user.jpg" />
+              <Avatar
+                size="sm"
+                name={userInfo.name}
+                src={userInfo.profilePicture}
+              />
 
               <Menu>
                 <MenuButton
@@ -88,6 +93,12 @@ const Header = () => {
                 <MenuList>
                   <Link to="/profile">
                     <MenuItem>Profile</MenuItem>
+                  </Link>
+                  <Link to="/bookRequests">
+                    <MenuItem>Requests for me</MenuItem>
+                  </Link>
+                  <Link to="/myRequests">
+                    <MenuItem>My requests</MenuItem>
                   </Link>
                   <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                 </MenuList>

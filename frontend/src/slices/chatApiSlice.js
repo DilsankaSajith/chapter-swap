@@ -33,6 +33,30 @@ export const chatApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Chat"],
     }),
+    renameGroupChat: builder.mutation({
+      query: (data) => ({
+        url: `${CHATS_URL}/grouprename`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Chat"],
+    }),
+    addUserToGroupChat: builder.mutation({
+      query: (data) => ({
+        url: `${CHATS_URL}/groupadd`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Chat"],
+    }),
+    removeUserFromGroupChat: builder.mutation({
+      query: (data) => ({
+        url: `${CHATS_URL}/groupremove`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["Chat"],
+    }),
   }),
 });
 
@@ -41,4 +65,7 @@ export const {
   useFetchChatsQuery,
   useAccessChatMutation,
   useCreateGroupChatMutation,
+  useRenameGroupChatMutation,
+  useAddUserToGroupChatMutation,
+  useRemoveUserFromGroupChatMutation,
 } = chatApiSlice;

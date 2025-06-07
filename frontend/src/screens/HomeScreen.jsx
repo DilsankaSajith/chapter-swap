@@ -136,9 +136,11 @@ const HomeScreen = () => {
           <Grid templateColumns="repeat(6, 1fr)" gap="32px">
             <GridItem colSpan={{ base: 6, lg: 4 }}>
               <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
-                {books.map((book) => (
-                  <Book key={book.id} book={book} />
-                ))}
+                {!books.length ? (
+                  <Text fontSize="xl">No search results</Text>
+                ) : (
+                  books.map((book) => <Book key={book.id} book={book} />)
+                )}
               </SimpleGrid>
             </GridItem>
 

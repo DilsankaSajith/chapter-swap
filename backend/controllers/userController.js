@@ -5,15 +5,35 @@ import generateToken from "../utils/generateToken.js";
 // @desc    Register user
 // @route   POST /api/users
 // @access  Public
-export const registerUser = async (req, res) => {
+export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, phone, address, city, state, postalCode, password } =
     req.body;
 
   const userExists = await User.findOne({ email });
+  const phoneExists = await User.findOne({ phone });
+
+  if (
+    !name ||
+    !email ||
+    !phone ||
+    !address ||
+    !city ||
+    !state ||
+    !postalCode ||
+    !password
+  ) {
+    res.status(400);
+    throw new Error("Please fill all fields");
+  }
 
   if (userExists) {
     res.status(400);
     throw new Error("User already exists");
+  }
+
+  if (phoneExists) {
+    res.status(400);
+    throw new Error("Phone number already exists");
   }
 
   const user = await User.create({
@@ -34,7 +54,7 @@ export const registerUser = async (req, res) => {
     res.status(400);
     throw new Error("Invalid user data");
   }
-};
+});
 
 // @desc    Auth user
 // @route   POST /api/users/login

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  FormControl,
   Input,
   Spinner,
   Text,
@@ -82,84 +83,107 @@ const RegisterScreen = () => {
         width={{ base: "100%", md: "40%" }}
         mx="auto"
       >
-        <Text mb="1">Fullname</Text>
-        <Input
-          type="text"
-          placeholder="John Doe"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Fullname*</Text>
+          <Input
+            type="text"
+            placeholder="John Doe"
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">Email address</Text>
-        <Input
-          type="email"
-          placeholder="me@example.com"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Profile picture</Text>
+          <Input type="file" p={1} cursor="pointer" />
+        </FormControl>
 
-        <Text mb="1">Phone</Text>
-        <Input
-          type="text"
-          placeholder="+94 555 555 555"
-          required
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Email address*</Text>
+          <Input
+            type="email"
+            placeholder="me@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">Address</Text>
-        <Input
-          type="text"
-          placeholder="123 Maplewood Lane"
-          required
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Phone*</Text>
+          <Input
+            type="text"
+            placeholder="+94 555 555 555"
+            required
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">City</Text>
-        <Input
-          type="text"
-          placeholder="Springfield"
-          required
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Address*</Text>
+          <Input
+            type="text"
+            placeholder="123 Maplewood Lane"
+            required
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">State</Text>
-        <Input
-          type="text"
-          placeholder="IL"
-          required
-          value={state}
-          onChange={(e) => setState(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">City*</Text>
+          <Input
+            type="text"
+            placeholder="Springfield"
+            required
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">Postal code</Text>
-        <Input
-          type="text"
-          placeholder="62704"
-          required
-          value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">State*</Text>
+          <Input
+            type="text"
+            placeholder="IL"
+            required
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">Password</Text>
-        <Input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Postal code*</Text>
+          <Input
+            type="text"
+            placeholder="62704"
+            required
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+          />
+        </FormControl>
 
-        <Text mb="1">Confirm password</Text>
-        <Input
-          type="password"
-          required
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Password*</Text>
+          <Input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FormControl>
+
+        <FormControl>
+          <Text mb="1">Confirm password*</Text>
+          <Input
+            type="password"
+            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </FormControl>
 
         <Button
           bg="accent.default"

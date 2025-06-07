@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../slices/usersApiSlice";
 import {
   Button,
+  FormControl,
   Input,
   Spinner,
   Text,
@@ -66,21 +67,27 @@ const LoginScreen = () => {
         width={{ base: "100%", md: "40%" }}
         mx="auto"
       >
-        <Text mb="1">Email address</Text>
-        <Input
-          type="email"
-          placeholder="me@example.com"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Text mb="1">Password</Text>
-        <Input
-          type="password"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <FormControl>
+          <Text mb="1">Email address</Text>
+          <Input
+            type="email"
+            placeholder="me@example.com"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </FormControl>
+
+        <FormControl>
+          <Text mb="1">Password</Text>
+          <Input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </FormControl>
+
         <Button
           bg="accent.default"
           width="full"

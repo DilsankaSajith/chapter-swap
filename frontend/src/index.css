@@ -22,3 +22,10 @@
 ::-webkit-scrollbar {
   width: 0px;
 }
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}

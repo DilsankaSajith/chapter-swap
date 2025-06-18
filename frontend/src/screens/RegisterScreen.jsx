@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
   Input,
-  Spinner,
   Text,
   VStack,
   useToast,
@@ -15,6 +14,7 @@ import { setCredentials } from "../slices/authSlice";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
@@ -53,6 +53,7 @@ const RegisterScreen = () => {
     try {
       const res = await register({
         name,
+        profilePicture,
         email,
         phone,
         address,
@@ -70,6 +71,28 @@ const RegisterScreen = () => {
         isClosable: true,
       });
     }
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "chapterswap");
+    data.append("cloud_name", "deqbtjlgk");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    const uploadedImageURL = await res.json();
+    setProfilePicture(uploadedImageURL.url);
   };
 
   return (
@@ -96,7 +119,12 @@ const RegisterScreen = () => {
 
         <FormControl>
           <Text mb="1">Profile picture</Text>
-          <Input type="file" p={1} cursor="pointer" />
+          <Input
+            type="file"
+            p={1}
+            cursor="pointer"
+            onChange={handleFileUpload}
+          />
         </FormControl>
 
         <FormControl>

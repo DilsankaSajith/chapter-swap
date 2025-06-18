@@ -76,8 +76,8 @@ const Header = () => {
               </Flex>
               <Avatar
                 size="sm"
-                name={userInfo.name}
-                src={userInfo.profilePicture}
+                name={userInfo?.name}
+                src={userInfo?.profilePicture}
               />
 
               <Menu>

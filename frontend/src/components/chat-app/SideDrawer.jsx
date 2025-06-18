@@ -27,7 +27,7 @@ const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState([]);
 
-  const { setSelectedChat, chats, setChats } = ChatState();
+  const { selectedChat, setSelectedChat, chats, setChats } = ChatState();
 
   const { data: apiUsers, isLoading } = useGetUsersQuery(search);
   const [accessChat, { isLoading: loadingAccessChat }] =

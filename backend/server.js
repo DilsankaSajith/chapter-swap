@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
 import chatUserRoutes from "./routes/chatUserRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
 dotenv.config();
 import connectDB from "./config/db.js";
 import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
@@ -30,6 +31,7 @@ app.use("/api/requests", requestRoutes);
 // Chat app
 app.use("/api/chats/users", chatUserRoutes);
 app.use("/api/chats", chatRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -6,8 +6,17 @@ import generateToken from "../utils/generateToken.js";
 // @route   POST /api/users
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, phone, address, city, state, postalCode, password } =
-    req.body;
+  const {
+    name,
+    profilePicture,
+    email,
+    phone,
+    address,
+    city,
+    state,
+    postalCode,
+    password,
+  } = req.body;
 
   const userExists = await User.findOne({ email });
   const phoneExists = await User.findOne({ phone });
@@ -45,6 +54,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     state,
     postalCode,
     password,
+    profilePicture,
   });
 
   if (user) {
@@ -107,6 +117,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
 
   if (user) {
     user.name = req.body.name || user.name;
+    user.profilePicture = req.body.profilePicture || user.profilePicture;
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
     user.address = req.body.address || user.address;

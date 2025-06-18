@@ -34,12 +34,15 @@ const ProfileScreen = () => {
   const [updateProfile, { isLoading: loadingUpdate }] = useProfileMutation();
 
   const [name, setName] = useState(userInfo.name);
+  const [profilePicture, setProfilePicture] = useState("");
   const [email, setEmail] = useState(userInfo.email);
   const [phone, setPhone] = useState(userInfo.phone);
   const [address, setAddress] = useState(userInfo.address);
   const [city, setCity] = useState(userInfo.city);
   const [state, setState] = useState(userInfo.state);
   const [postalCode, setPostalCode] = useState(userInfo.postalCode);
+
+  const [imageUploading, setImageUploading] = useState(false);
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,6 +53,7 @@ const ProfileScreen = () => {
     try {
       await updateProfile({
         name,
+        profilePicture,
         email,
         phone,
         address,
@@ -76,6 +80,30 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setImageUploading(true);
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "chapterswap");
+    data.append("cloud_name", "deqbtjlgk");
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+
+    const uploadedImageURL = await res.json();
+    setProfilePicture(uploadedImageURL.url);
+    setImageUploading(false);
+  };
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -87,6 +115,17 @@ const ProfileScreen = () => {
             <FormControl mb={3}>
               <FormLabel>Fullname</FormLabel>
               <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </FormControl>
+            <FormControl>
+              <Text mb="1">
+                {imageUploading ? "Uploading..." : "Profile picture"}
+              </Text>
+              <Input
+                type="file"
+                p={1}
+                cursor="pointer"
+                onChange={handleFileUpload}
+              />
             </FormControl>
             <FormControl mb={3}>
               <FormLabel>Email</FormLabel>
@@ -156,11 +195,11 @@ const ProfileScreen = () => {
             <Box position="relative">
               <Avatar
                 size="2xl"
-                name="Segun Adebayo"
+                name={user.name}
                 src={user.profilePicture}
                 mb={3}
               />
-              <EditProfileButton />
+              {/* <EditProfileButton /> */}
             </Box>
             <Text fontSize="2xl" fontWeight="medium">
               {user.name}

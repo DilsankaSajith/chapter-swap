@@ -5,6 +5,7 @@ import {
   getBookById,
   updateBook,
   deleteBook,
+  createBookReview,
 } from "../controllers/bookController.js";
 import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
@@ -15,5 +16,6 @@ router
   .get(getBookById)
   .put(protect, updateBook)
   .delete(protect, deleteBook);
+router.route("/:id/reviews").post(protect, createBookReview);
 
 export default router;

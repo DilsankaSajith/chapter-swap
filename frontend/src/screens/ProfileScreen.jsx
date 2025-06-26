@@ -23,8 +23,6 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetBooksQuery } from "../slices/booksApiSlice";
 import { useMyProfileQuery, useProfileMutation } from "../slices/usersApiSlice";
-import Book from "../components/Book";
-import EditProfileButton from "../components/EditProfileButton";
 
 const ProfileScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
@@ -237,6 +235,7 @@ const ProfileScreen = () => {
               width="full"
               color="#000000"
               size="sm"
+              borderRadius="sm"
               mt={8}
               _hover={{ bg: "accent.event" }}
               onClick={onOpen}

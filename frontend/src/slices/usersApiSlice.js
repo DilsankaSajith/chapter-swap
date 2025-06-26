@@ -38,6 +38,13 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ["User"],
       keepUnusedDataFor: 5,
     }),
+    getOtherProfile: builder.query({
+      query: (profileId) => ({
+        url: `${USERS_URL}/${profileId}`,
+      }),
+      providesTags: ["User"],
+      keepUnusedDataFor: 5,
+    }),
     getAllUsers: builder.query({
       query: () => ({
         url: USERS_URL,
@@ -71,4 +78,5 @@ export const {
   useGetAllUsersQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
+  useGetOtherProfileQuery,
 } = usersApiSlice;

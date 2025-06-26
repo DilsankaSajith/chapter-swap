@@ -5,7 +5,7 @@ import {
   useUnfollowUserMutation,
 } from "../slices/usersApiSlice";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const FollowUser = ({ user }) => {
   const toast = useToast();
@@ -70,10 +70,12 @@ const FollowUser = ({ user }) => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between" width="full">
-      <Flex alignItems="center" gap="8px">
-        <Avatar src={user.profilePicture} name={user.name} size="sm" />
-        <Text>{user.name}</Text>
-      </Flex>
+      <Link to={`/profile/${user._id}`}>
+        <Flex alignItems="center" gap="8px" cursor="pointer">
+          <Avatar src={user.profilePicture} name={user.name} size="sm" />
+          <Text>{user.name}</Text>
+        </Flex>
+      </Link>
       {userDetails?.follwings.includes(user._id) ? (
         <Button
           borderRadius="sm"

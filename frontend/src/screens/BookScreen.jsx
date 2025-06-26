@@ -18,9 +18,21 @@ import {
   FormLabel,
   Input,
   useToast,
+  Alert,
+  AlertIcon,
+  Select,
+  Textarea,
+  Card,
+  CardBody,
+  Stack,
+  Heading,
+  StackDivider,
 } from "@chakra-ui/react";
-import { useGetBookDetailsQuery } from "../slices/booksApiSlice";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useGetBookDetailsQuery,
+  useCreateReviewMutation,
+} from "../slices/booksApiSlice";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Rating from "../components/Rating";
 import { useSelector } from "react-redux";
 import { useState } from "react";
@@ -28,6 +40,8 @@ import { useCreateRequestMutation } from "../slices/requestsApiSlice";
 
 const BookScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const [address, setAddress] = useState(userInfo.address);
@@ -36,16 +50,23 @@ const BookScreen = () => {
   const [postalCode, setPostalCode] = useState(userInfo.postalCode);
   const [country, setCountry] = useState("Sri lanka");
   const [phone, setPhone] = useState(userInfo.phone);
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
 
   const { id: bookId } = useParams();
-  const { data: book, isLoading, error } = useGetBookDetailsQuery(bookId);
+
+  const {
+    data: book,
+    isLoading,
+    error,
+    refetch,
+  } = useGetBookDetailsQuery(bookId);
   const [
     createRequest,
     { isLoading: loadingCreateRequest, error: createRequestError },
   ] = useCreateRequestMutation();
+  const [createReview, { isLoading: loadingBookReview }] =
+    useCreateReviewMutation();
 
   const submitHandler = async () => {
     const newRequest = {
@@ -76,6 +97,31 @@ const BookScreen = () => {
         isClosable: true,
       });
       onClose();
+    }
+  };
+
+  const reviewSubmitHandler = async (e) => {
+    e.preventDefault();
+    console.log(rating, comment);
+
+    try {
+      await createReview({ bookId, rating, comment }).unwrap();
+      toast({
+        title: "Review submitted",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      refetch();
+      setRating(0);
+      setComment("");
+    } catch (err) {
+      toast({
+        title: err?.data?.message || err.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -145,7 +191,7 @@ const BookScreen = () => {
                   isLoading={loadingCreateRequest}
                   onClick={submitHandler}
                 >
-                  Request
+                  Confirm
                 </Button>
                 <Button onClick={onClose} w="full" borderRadius="sm">
                   Cancel
@@ -153,67 +199,187 @@ const BookScreen = () => {
               </VStack>
             </ModalContent>
           </Modal>
-          <Flex
-            direction={{ base: "column", md: "row" }}
-            alignItems={{ base: "center", md: "flex-start" }}
-            gap={4}
+          <Box
             bg="gray.dark"
+            display="flex"
+            flexDirection="column"
             p={6}
             borderRadius="md"
             border="1px"
             borderColor="gray.light"
+            gap={8}
           >
-            <Box width="25%">
-              <Image src={book.image} />
-            </Box>
-            <Box>
-              <Text fontSize="2xl" fontWeight="medium">
-                {book.title}
-              </Text>
-              <Text color="gray.500">
-                {book.author} | {book.category}
-              </Text>
-              <Text color="gray.500" mt={4}>
-                {book.description}
-              </Text>
-              <Rating value={book.rating} text={`${book.numReviews} reviews`} />
+            <Flex
+              direction={{ base: "column", md: "row" }}
+              alignItems={{ base: "center", md: "flex-start" }}
+              gap={4}
+            >
+              <Box width="25%">
+                <Image src={book.image} />
+              </Box>
+              <Box>
+                <Text fontSize="2xl" fontWeight="medium">
+                  {book.title}
+                </Text>
+                <Text color="gray.500">
+                  {book.author} | {book.category}
+                </Text>
+                <Text color="gray.500" mt={2}>
+                  {book.description}
+                </Text>
+                <Rating
+                  value={book.rating}
+                  text={`${book.numReviews} reviews`}
+                />
 
-              <Flex alignItems="center" justifyContent="space-between">
-                <Flex gap={2}>
-                  <Avatar
-                    size="xs"
-                    name={`${book.user?.name}`}
-                    src={`${book.user?.profilePicture}`}
-                  />
-                  <Text>{book.user?.name}</Text>
-                </Flex>
-                {userInfo?._id === book.user?._id ? (
-                  <></>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Link to={`/profile/${book.user?._id}`}>
+                    <Box
+                      onClick={() => {}}
+                      cursor="pointer"
+                      bg="gray.800"
+                      p={3}
+                      borderRadius="sm"
+                      display="flex"
+                      alignItems="center"
+                      gap={2}
+                      _hover={{ bg: "gray.800" }}
+                    >
+                      <Avatar
+                        size="xs"
+                        name={`${book.user?.name}`}
+                        src={`${book.user?.profilePicture}`}
+                      />
+                      <Box display="flex" flexDir="column">
+                        <Text>{book.user?.name}</Text>
+                        <Text fontSize="xs" color="gray.500">
+                          {book.user?.email}
+                        </Text>
+                      </Box>
+                    </Box>
+                  </Link>
+
+                  {userInfo?._id === book.user?._id ? (
+                    <></>
+                  ) : (
+                    <Flex gap={2}>
+                      <Button
+                        bg="accent.default"
+                        color="#000000"
+                        size="sm"
+                        borderRadius="sm"
+                        _hover={{ bg: "accent.event" }}
+                        onClick={onOpen}
+                      >
+                        Request
+                      </Button>
+                      <Button
+                        bg="accent.default"
+                        color="#000000"
+                        size="sm"
+                        borderRadius="sm"
+                        _hover={{ bg: "accent.event" }}
+                      >
+                        Add to favorites
+                      </Button>
+                    </Flex>
+                  )}
+                </Box>
+              </Box>
+            </Flex>
+            <Box
+              display={{ base: "block", md: "flex" }}
+              alignItems="baseline"
+              gap={6}
+            >
+              <Box width={{ md: "50%" }}>
+                <Text fontSize="2xl" fontWeight="medium">
+                  Reviews
+                </Text>
+                {book.reviews.length === 0 ? (
+                  <Alert status="info" mt={3}>
+                    <AlertIcon />
+                    No Reviews
+                  </Alert>
                 ) : (
-                  <Flex gap={2}>
-                    <Button
-                      bg="accent.default"
-                      color="#000000"
-                      size="sm"
-                      _hover={{ bg: "accent.event" }}
-                      onClick={onOpen}
-                    >
-                      Request this book
-                    </Button>
-                    <Button
-                      variant="outline"
-                      color="accent.default"
-                      size="sm"
-                      borderColor="accent.default"
-                      _hover={{ bg: "accent.event", color: "#000000" }}
-                    >
-                      Add to favorites
-                    </Button>
-                  </Flex>
+                  <Card borderRadius="sm" bg="gray.800">
+                    <CardBody>
+                      <Stack divider={<StackDivider />} spacing="4">
+                        {book.reviews.map((review) => (
+                          <Box key={review._id}>
+                            <Flex
+                              alignItems="center"
+                              justifyContent="space-between"
+                            >
+                              <Heading size="xs">{review.name}</Heading>
+                              <Text fontSize="sm" color="gray.500">
+                                {review.createdAt.substring(0, 10)}
+                              </Text>
+                            </Flex>
+                            <Rating value={review.rating} />
+
+                            <Text fontSize="sm">{review.comment}</Text>
+                          </Box>
+                        ))}
+                      </Stack>
+                    </CardBody>
+                  </Card>
                 )}
-              </Flex>
+              </Box>
+              <Box width={{ md: "50%" }}>
+                <Text fontSize="xl" fontWeight="medium" mt={6} mb={4}>
+                  Write a review
+                </Text>
+                {loadingBookReview && <Spinner />}
+                {userInfo ? (
+                  <>
+                    <FormControl
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                    >
+                      <FormLabel>Rating</FormLabel>
+                      <Select placeholder="Select rating">
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </Select>
+                    </FormControl>
+                    <FormControl
+                      mt={3}
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    >
+                      <Textarea placeholder="Write your review here." />
+                    </FormControl>
+                    <Button
+                      mt={3}
+                      bg="accent.default"
+                      _hover={{ bg: "accent.event" }}
+                      color="black"
+                      w="full"
+                      borderRadius="sm"
+                      disabled={loadingBookReview}
+                      isLoading={loadingBookReview}
+                      onClick={reviewSubmitHandler}
+                    >
+                      Submit
+                    </Button>
+                  </>
+                ) : (
+                  <Alert status="info" mt={3}>
+                    <AlertIcon />
+                    <Link>Sign in</Link> to write a review
+                  </Alert>
+                )}
+              </Box>
             </Box>
-          </Flex>
+          </Box>
         </>
       )}
     </>

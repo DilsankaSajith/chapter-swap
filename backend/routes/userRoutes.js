@@ -3,6 +3,7 @@ import {
   authUser,
   followUser,
   getAllUsers,
+  getOtherUserProfile,
   getUserProfile,
   logout,
   registerUser,
@@ -19,6 +20,7 @@ router
   .route("/profile")
   .get(protect, getUserProfile)
   .put(protect, updateUserProfile);
+router.route("/:id").get(getOtherUserProfile);
 router.route("/:id/follow").put(protect, followUser);
 router.route("/:id/unfollow").put(protect, unfollowUser);
 

@@ -24,6 +24,7 @@ import MyRequestsScreen from "./screens/MyRequestsScreen.jsx";
 import RequestScreen from "./screens/RequestScreen.jsx";
 import ChatScreen from "./screens/ChatScreen.jsx";
 import ChatProvider from "./context/ChatProvider.js";
+import UserProfileScreen from "./screens/UserProfileScreen.jsx";
 
 const styles = {
   global: (props) => ({
@@ -65,6 +66,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />}></Route>
       <Route path="/register" element={<RegisterScreen />}></Route>
       <Route path="/book/:id" element={<BookScreen />}></Route>
+      <Route path="/profile/:id" element={<UserProfileScreen />}></Route>
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />}></Route>

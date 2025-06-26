@@ -88,16 +88,18 @@ const MyChats = () => {
                         : getSender(userInfo, chat.users).profilePicture
                     }
                   />
-                  <Text>
-                    {!chat.isGroupChat
-                      ? getSender(userInfo, chat.users).name
-                      : chat.chatName}
-                  </Text>
-                  <Text fontSize="xs" color="gray.500">
-                    {!chat.isGroupChat
-                      ? getSender(userInfo, chat.users).email
-                      : "Group Chat"}
-                  </Text>
+                  <Box display="flex" flexDir="column">
+                    <Text>
+                      {!chat.isGroupChat
+                        ? getSender(userInfo, chat.users).name
+                        : chat.chatName}
+                    </Text>
+                    <Text fontSize="xs" color="gray.500">
+                      {!chat.isGroupChat
+                        ? getSender(userInfo, chat.users).email
+                        : "Group Chat"}
+                    </Text>
+                  </Box>
                 </Box>
               </>
             ))}

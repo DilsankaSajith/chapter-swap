@@ -21,12 +21,19 @@ import {
 } from "../../slices/messageApiSlice";
 import ScrollableChat from "./ScrollableChat";
 import { GoPaperAirplane } from "react-icons/go";
+import { useEffect } from "react";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000";
+var socket, selectedChatCompare;
 
 const SingleChat = () => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const { selectedChat, setSelectedChat } = ChatState();
+  const { selectedChat, setSelectedChat, notifications, setNotifications } =
+    ChatState();
   const { userInfo } = useSelector((store) => store.auth);
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const {
     data: apiMessages,
@@ -39,6 +46,42 @@ const SingleChat = () => {
 
   const toast = useToast();
 
+  useEffect(() => {
+    if (apiMessages) {
+      setMessages(apiMessages);
+    }
+  }, [apiMessages]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", userInfo);
+    socket.on("connection", () => setSocketConnected(true));
+  }, []);
+
+  useEffect(() => {
+    if (!selectedChat) return;
+
+    socket.emit("join_chat", selectedChat._id);
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message_recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        // give notification
+        if (!notifications.includes(newMessageRecieved)) {
+          setNotifications([newMessageRecieved, ...notifications]);
+          console.log(notifications);
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
   const sendMessage = async () => {
     try {
       if (newMessage) {
@@ -48,6 +91,7 @@ const SingleChat = () => {
         }).unwrap();
         setNewMessage("");
         setMessages([...messages, message]);
+        socket.emit("new_message", message);
         refetch();
       }
     } catch (err) {
@@ -62,6 +106,8 @@ const SingleChat = () => {
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
+
+    // Typing indicator
   };
 
   return (
@@ -110,7 +156,7 @@ const SingleChat = () => {
               />
             ) : (
               <div className="messages">
-                <ScrollableChat messages={apiMessages} />
+                <ScrollableChat messages={messages} />
               </div>
             )}
             <FormControl

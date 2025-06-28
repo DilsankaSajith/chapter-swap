@@ -157,43 +157,43 @@ const Book = ({ book }) => {
       </Modal>
 
       <Link to={`/book/${book._id}`}>
-        <Card
+        <Box
           maxW="sm"
-          minH="350px"
           bg="gray.dark"
-          borderRadius="md"
+          borderRadius="sm"
           border="1px"
           borderColor="gray.light"
-          _hover={{ bg: "gray.700" }}
+          transition="ease 0.3s"
+          _hover={{ bg: "gray.800" }}
         >
-          <CardBody>
-            <Image
-              src={book.image}
-              alt="book1"
-              borderRadius="lg"
-              minW="125px"
-            />
+          <Box w="full" h="120px" overflow="hidden">
+            <Image src={book.image} alt="book1" borderRadius="sm" />
+          </Box>
 
+          <Box px={1} pb={1}>
             <Text
               fontWeight="normal"
-              fontSize="lg"
+              fontSize="sm"
               mt="2"
               fontFamily="Joan"
               letterSpacing="1px"
+              isTruncated
             >
               {book.title}
             </Text>
-            <Text color="gray.500">{book.author}</Text>
+            <Text color="gray.500" fontSize="xs" isTruncated>
+              {book.author}
+            </Text>
 
             <Flex alignItems="center" gap="8px">
               <FaStar style={{ color: "#ffbc03" }} />
               <span>{book.rating}</span>
             </Flex>
-          </CardBody>
-        </Card>
+          </Box>
+        </Box>
       </Link>
       {userInfo?._id === book.user && (
-        <Stack direction="row" position="absolute" top={2} right={2}>
+        <Stack direction="row" position="absolute" top={1} right={1}>
           <Menu>
             <MenuButton>
               <Flex
@@ -207,7 +207,7 @@ const Book = ({ book }) => {
                 _hover={{ bg: "accent.event" }}
                 transition="ease 0.3s"
                 color="#000"
-                boxShadow="2xl"
+                boxShadow="lg"
               >
                 <HiMiniCog6Tooth className="nav-icon" />
               </Flex>

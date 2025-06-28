@@ -6,11 +6,13 @@ import {
   updateBook,
   deleteBook,
   createBookReview,
+  getTopBooks,
 } from "../controllers/bookController.js";
 import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 router.route("/").get(getBooks).post(protect, createBook);
+router.get("/top", getTopBooks);
 router
   .route("/:id")
   .get(getBookById)

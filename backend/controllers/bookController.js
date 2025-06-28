@@ -17,6 +17,20 @@ export const getBooks = asyncHandler(async (req, res) => {
 // @route   POST /api/books
 // @access  Public
 export const createBook = asyncHandler(async (req, res) => {
+  /* user, title, isbn, author, description, image, category */
+
+  if (
+    !req.body.title ||
+    !req.body.isbn ||
+    !req.body.author ||
+    !req.body.description ||
+    !req.body.image ||
+    !req.body.category
+  ) {
+    res.status(400);
+    throw new Error("Please fill all fields");
+  }
+
   const book = new Book({ ...req.body, user: req.user._id });
   const createdBook = await book.save();
 
@@ -113,4 +127,12 @@ export const createBookReview = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Resource not found");
   }
+});
+
+// @desc    Get top rated books
+// @route   GET /api/books/top
+// @access  Public
+export const getTopBooks = asyncHandler(async (req, res) => {
+  const books = await Book.find({}).sort({ rating: -1 }).limit(3);
+  res.status(200).json(books);
 });

@@ -41,7 +41,7 @@ const Header = () => {
   };
 
   return (
-    <Box>
+    <Box bg="gray.dark" border="1px" borderColor="gray.light">
       <Container maxWidth="6xl" py="2">
         <Flex alignItems="center" justifyContent="space-between">
           <Link to="/">
@@ -144,11 +144,15 @@ const Header = () => {
                     <MenuItem>Profile</MenuItem>
                   </Link>
                   <Link to="/bookRequests">
-                    <MenuItem>Requests for me</MenuItem>
+                    <MenuItem>Wants</MenuItem>
                   </Link>
                   <Link to="/myRequests">
-                    <MenuItem>My requests</MenuItem>
+                    <MenuItem>Asks</MenuItem>
                   </Link>
+                  <Link to="/saved">
+                    <MenuItem>Saved</MenuItem>
+                  </Link>
+
                   <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                 </MenuList>
               </Menu>

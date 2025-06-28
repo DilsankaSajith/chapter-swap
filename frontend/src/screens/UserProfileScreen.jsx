@@ -93,9 +93,9 @@ const UserProfileScreen = () => {
 
           <Grid templateColumns="repeat(6, 1fr)" gap="32px" width="full">
             <GridItem colSpan={{ base: 6, lg: 4 }}>
-              <SimpleGrid columns={4} gap="10px" minChildWidth="150px">
+              <SimpleGrid columns={4} gap={3}>
                 {!ownBooks.length ? (
-                  <Text fontSize="xl">No search results</Text>
+                  <Text fontSize="xl">No Books Added Yet</Text>
                 ) : (
                   ownBooks.map((book) => <Book key={book.id} book={book} />)
                 )}

@@ -56,7 +56,11 @@ const colors = {
   },
 };
 
-const theme = extendTheme({ config, styles, colors });
+const theme = extendTheme({
+  config,
+  styles,
+  colors,
+});
 
 const router = createBrowserRouter(
   createRoutesFromElements(

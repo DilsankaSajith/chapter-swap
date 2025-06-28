@@ -40,7 +40,7 @@ const SearchResult = ({ searchedBook, onClose }) => {
       return;
     }
 
-    await createBookAPI(newBook);
+    await createBookAPI(newBook).unwrap();
     toast({
       title: "Book added",
       status: "success",

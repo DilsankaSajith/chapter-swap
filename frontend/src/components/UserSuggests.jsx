@@ -11,7 +11,7 @@ const UserSuggests = () => {
     <Box
       bg="gray.dark"
       p={6}
-      borderRadius="md"
+      borderRadius="sm"
       border="1px"
       borderColor="gray.light"
     >

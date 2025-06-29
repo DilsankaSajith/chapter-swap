@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
+  FormLabel,
   Input,
   Text,
   VStack,
@@ -23,6 +24,7 @@ const RegisterScreen = () => {
   const [postalCode, setPostalCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const toast = useToast();
   const dispatch = useDispatch();
@@ -78,6 +80,7 @@ const RegisterScreen = () => {
 
     if (!file) return;
 
+    setUploadingImage(true);
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", "chapterswap");
@@ -93,6 +96,7 @@ const RegisterScreen = () => {
 
     const uploadedImageURL = await res.json();
     setProfilePicture(uploadedImageURL.url);
+    setUploadingImage(false);
   };
 
   return (
@@ -106,8 +110,8 @@ const RegisterScreen = () => {
         width={{ base: "100%", md: "40%" }}
         mx="auto"
       >
-        <FormControl>
-          <Text mb="1">Fullname*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Fullname</FormLabel>
           <Input
             type="text"
             placeholder="John Doe"
@@ -118,7 +122,7 @@ const RegisterScreen = () => {
         </FormControl>
 
         <FormControl>
-          <Text mb="1">Profile picture</Text>
+          <FormLabel mb="1">Profile picture</FormLabel>
           <Input
             type="file"
             p={1}
@@ -127,8 +131,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Email address*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Email address</FormLabel>
           <Input
             type="email"
             placeholder="me@example.com"
@@ -138,8 +142,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Phone*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Phone</FormLabel>
           <Input
             type="text"
             placeholder="+94 555 555 555"
@@ -149,8 +153,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Address*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Address</FormLabel>
           <Input
             type="text"
             placeholder="123 Maplewood Lane"
@@ -160,8 +164,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">City*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">City</FormLabel>
           <Input
             type="text"
             placeholder="Springfield"
@@ -171,8 +175,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">State*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">State</FormLabel>
           <Input
             type="text"
             placeholder="IL"
@@ -182,8 +186,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Postal code*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Postal code</FormLabel>
           <Input
             type="text"
             placeholder="62704"
@@ -193,8 +197,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Password*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Password</FormLabel>
           <Input
             type="password"
             required
@@ -203,8 +207,8 @@ const RegisterScreen = () => {
           />
         </FormControl>
 
-        <FormControl>
-          <Text mb="1">Confirm password*</Text>
+        <FormControl isRequired>
+          <FormLabel mb="1">Confirm password</FormLabel>
           <Input
             type="password"
             required
@@ -223,6 +227,7 @@ const RegisterScreen = () => {
           onClick={submitHandler}
           isLoading={isLoading}
           borderRadius="sm"
+          disabled={uploadingImage}
         >
           Sign up
         </Button>

@@ -2,15 +2,6 @@ import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
-  // <Link to="/profile">
-  //                     <MenuItem>Profile</MenuItem>
-  //                   </Link>
-  //                   <Link to="/bookRequests">
-  //                     <MenuItem>Wants</MenuItem>
-  //                   </Link>
-  //                   <Link to="/myRequests">
-  //                     <MenuItem>Asks</MenuItem>
-  //                   </Link>
   return (
     <Flex flexDir="column" gap={3}>
       <Link to="/bookRequests">
@@ -43,7 +34,7 @@ const Sidebar = () => {
         </Flex>
       </Link>
 
-      <Link to="/myRequests">
+      <Link to="/favorites">
         <Flex
           alignItems="center"
           gap={2}

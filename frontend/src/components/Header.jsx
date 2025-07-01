@@ -149,7 +149,7 @@ const Header = () => {
                   <Link to="/myRequests">
                     <MenuItem>Asks</MenuItem>
                   </Link>
-                  <Link to="/saved">
+                  <Link to="/favorites">
                     <MenuItem>Saved</MenuItem>
                   </Link>
 

@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 5,
     },
+    zeroPointsSince: {
+      type: Date,
+      default: null,
+    },
     followers: [Schema.Types.ObjectId],
     follwings: [Schema.Types.ObjectId],
     isAdmin: {

@@ -36,6 +36,13 @@ export const booksApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Book"],
     }),
+    addToFavorite: builder.mutation({
+      query: (bookId) => ({
+        url: `${BOOKS_URL}/${bookId}/addToFavorite`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Book"],
+    }),
     deleteBook: builder.mutation({
       query: (bookId) => ({
         url: `${BOOKS_URL}/${bookId}`,
@@ -57,10 +64,19 @@ export const booksApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 5,
     }),
+    getFavoriteBooks: builder.query({
+      query: () => ({
+        url: `${BOOKS_URL}/favorites`,
+      }),
+      keepUnusedDataFor: 5,
+      invalidatesTags: ["Book"],
+    }),
   }),
 });
 
 export const {
+  useGetFavoriteBooksQuery,
+  useAddToFavoriteMutation,
   useGetTopBooksQuery,
   useGetBooksQuery,
   useCreateBookMutation,

@@ -15,6 +15,7 @@ import {
 import Book from "../components/Book";
 import { useGetBooksQuery } from "../slices/booksApiSlice";
 import { useEffect, useState } from "react";
+import FollowUserButton from "../components/FollowUserButton";
 
 const UserProfileScreen = () => {
   const { id: profileId } = useParams();
@@ -89,6 +90,8 @@ const UserProfileScreen = () => {
                 <Text>Followings</Text>
               </VStack>
             </HStack>
+
+            <FollowUserButton user={userData} width={"full"} />
           </Box>
 
           <Grid templateColumns="repeat(6, 1fr)" gap="32px" width="full">

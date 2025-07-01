@@ -21,12 +21,27 @@ export const createRequest = asyncHandler(async (req, res) => {
 
   const user = await User.findById(req.user._id).select("-password");
 
+  // Refill points
+  if (user.points === 0 && user.zeroPointsSince) {
+    const now = new Date();
+    const oneWeekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+
+    if (user.zeroPointsSince <= oneWeekAgo) {
+      user.points = 3;
+      user.zeroPointsSince = null;
+      await user.save();
+    }
+  }
+
   if (user.points === 0) {
     res.status(403);
     throw new Error("Please earn points to make a request");
   }
 
   user.points = user.points - 1;
+  if (user.points === 0) {
+    user.zeroPointsSince = new Date();
+  }
   await user.save();
 
   const request = new Request({ ...req.body, user: req.user._id });

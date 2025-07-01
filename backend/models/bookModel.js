@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -69,6 +69,7 @@ const bookSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    favoritedBy: [Schema.Types.ObjectId],
   },
   { timestamps: true }
 );

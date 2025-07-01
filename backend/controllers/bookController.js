@@ -97,15 +97,15 @@ export const deleteBook = asyncHandler(async (req, res) => {
 export const createBookReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
 
-  const product = await Book.findById(req.params.id);
-  if (product) {
-    const alreadyReviewed = product.reviews.find(
+  const book = await Book.findById(req.params.id);
+  if (book) {
+    const alreadyReviewed = book.reviews.find(
       (review) => review.user.toString() === req.user._id.toString()
     );
 
     if (alreadyReviewed) {
       res.status(400);
-      throw new Error("Product already reviewed");
+      throw new Error("Book already reviewed");
     }
 
     const review = {
@@ -115,13 +115,13 @@ export const createBookReview = asyncHandler(async (req, res) => {
       user: req.user._id,
     };
 
-    product.reviews.push(review);
-    product.numReviews = product.reviews.length;
-    product.rating =
-      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-      product.reviews.length;
+    book.reviews.push(review);
+    book.numReviews = book.reviews.length;
+    book.rating =
+      book.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      book.reviews.length;
 
-    await product.save();
+    await book.save();
     res.status(201).json({ message: "Review added" });
   } else {
     res.status(404);
@@ -134,5 +134,37 @@ export const createBookReview = asyncHandler(async (req, res) => {
 // @access  Public
 export const getTopBooks = asyncHandler(async (req, res) => {
   const books = await Book.find({}).sort({ rating: -1 }).limit(3);
+  res.status(200).json(books);
+});
+
+// @desc    Add and remove from favorites
+// @route   PUT /api/books/:id/addToFavorite
+// @access  Private
+export const addToFavorite = asyncHandler(async (req, res) => {
+  const book = await Book.findById(req.params.id);
+
+  if (book) {
+    if (!book.favoritedBy.includes(req.user._id)) {
+      await book.updateOne({ $push: { favoritedBy: req.user._id } });
+      res.status(200).json({ message: "Book has been added to favorites" });
+    } else {
+      await book.updateOne({ $pull: { favoritedBy: req.user._id } });
+      res.status(200).json({ message: "Book has been removed from favorites" });
+    }
+  } else {
+    res.status(404);
+    throw new Error("Resource not found");
+  }
+});
+
+// @desc    Get favorite books
+// @route   GET /api/books/favorites
+// @access  Private
+
+export const getFavoriteBooks = asyncHandler(async (req, res) => {
+  const books = await Book.find({ favoritedBy: req.user._id });
+  if (!books) {
+    res.status(400).json({ message: "No books in favorites" });
+  }
   res.status(200).json(books);
 });

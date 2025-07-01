@@ -28,9 +28,11 @@ import {
   Heading,
   StackDivider,
 } from "@chakra-ui/react";
+import { HiBookmark, HiBookmarkSlash } from "react-icons/hi2";
 import {
   useGetBookDetailsQuery,
   useCreateReviewMutation,
+  useAddToFavoriteMutation,
 } from "../slices/booksApiSlice";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Rating from "../components/Rating";
@@ -67,6 +69,8 @@ const BookScreen = () => {
   ] = useCreateRequestMutation();
   const [createReview, { isLoading: loadingBookReview }] =
     useCreateReviewMutation();
+  const [addToFavoritesApi, { isLoading: loadingAddToFavorites }] =
+    useAddToFavoriteMutation();
 
   const submitHandler = async () => {
     const newRequest = {
@@ -102,7 +106,6 @@ const BookScreen = () => {
 
   const reviewSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(rating, comment);
 
     try {
       await createReview({ bookId, rating, comment }).unwrap();
@@ -115,6 +118,19 @@ const BookScreen = () => {
       refetch();
       setRating(0);
       setComment("");
+    } catch (err) {
+      toast({
+        title: err?.data?.message || err.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const addToFavorites = async () => {
+    try {
+      await addToFavoritesApi(book._id).unwrap();
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
@@ -210,13 +226,52 @@ const BookScreen = () => {
             gap={8}
           >
             <Flex
-              direction={{ base: "column", md: "row" }}
+              direction={"column"}
               alignItems={{ base: "center", md: "flex-start" }}
               gap={4}
             >
-              <Box width="25%">
+              <Flex w="full" justifyContent="space-between">
                 <Image src={book.image} />
-              </Box>
+
+                {book.favoritedBy
+                  .map((id) => id.toString())
+                  .includes(userInfo._id.toString()) ? (
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    width="50px"
+                    height="50px"
+                    bg="accent.default"
+                    borderRadius="full"
+                    cursor="pointer"
+                    _hover={{ bg: "accent.event" }}
+                    color="black"
+                    transition="ease 0.2s"
+                    onClick={addToFavorites}
+                    fontSize="xl"
+                  >
+                    {loadingAddToFavorites ? <Spinner /> : <HiBookmarkSlash />}
+                  </Flex>
+                ) : (
+                  <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    width="50px"
+                    height="50px"
+                    bg="accent.default"
+                    borderRadius="full"
+                    cursor="pointer"
+                    _hover={{ bg: "accent.event" }}
+                    color="black"
+                    transition="ease 0.2s"
+                    onClick={addToFavorites}
+                    fontSize="xl"
+                  >
+                    {loadingAddToFavorites ? <Spinner /> : <HiBookmark />}
+                  </Flex>
+                )}
+              </Flex>
+
               <Box>
                 <Text fontSize="2xl" fontWeight="medium">
                   {book.title}
@@ -266,25 +321,17 @@ const BookScreen = () => {
                   {userInfo?._id === book.user?._id ? (
                     <></>
                   ) : (
-                    <Flex gap={2}>
+                    <Flex gap={2} alignItems="center">
                       <Button
                         bg="accent.default"
                         color="#000000"
-                        size="sm"
+                        size="md"
+                        width="150px"
                         borderRadius="sm"
                         _hover={{ bg: "accent.event" }}
                         onClick={onOpen}
                       >
                         Request
-                      </Button>
-                      <Button
-                        bg="accent.default"
-                        color="#000000"
-                        size="sm"
-                        borderRadius="sm"
-                        _hover={{ bg: "accent.event" }}
-                      >
-                        Add to favorites
                       </Button>
                     </Flex>
                   )}

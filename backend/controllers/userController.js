@@ -1,5 +1,6 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
+import Notification from "../models/notificationModel.js";
 import generateToken from "../utils/generateToken.js";
 
 // @desc    Register user
@@ -163,6 +164,15 @@ export const followUser = asyncHandler(async (req, res) => {
     if (!user.followers.includes(req.user._id)) {
       await user.updateOne({ $push: { followers: req.user._id } });
       await currentUser.updateOne({ $push: { follwings: user._id } });
+
+      // Create a notification
+      await Notification.create({
+        sender: currentUser._id,
+        receivers: [user._id],
+        message: `${currentUser.name} started following you`,
+        type: "Followed",
+      });
+
       res.status(200).json({ message: "User has been followed" });
     } else {
       res.status(403);

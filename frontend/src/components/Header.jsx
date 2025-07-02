@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/authSlice";
 import { ChatState } from "../context/ChatProvider";
 import { getSender } from "../utils/helpers";
+import Notification from "./Notification";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -110,19 +111,7 @@ const Header = () => {
                 </MenuList>
               </Menu>
 
-              <Flex
-                alignItems="center"
-                justifyContent="center"
-                width="36px"
-                height="36px"
-                bg="gray.dark"
-                borderRadius="full"
-                cursor="pointer"
-                _hover={{ bg: "gray.700" }}
-                transition="ease 0.3s"
-              >
-                <FaBell className="nav-icon" />
-              </Flex>
+              <Notification />
               <Avatar
                 size="sm"
                 name={userInfo?.name}

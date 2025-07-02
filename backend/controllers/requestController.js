@@ -1,6 +1,8 @@
 import Request from "../models/requestModel.js";
 import User from "../models/userModel.js";
 import asyncHandler from "../middleware/asyncHandler.js";
+import Notification from "../models/notificationModel.js";
+import Book from "../models/bookModel.js";
 
 // @desc    Create a request
 // @route   POST /api/requests
@@ -46,6 +48,16 @@ export const createRequest = asyncHandler(async (req, res) => {
 
   const request = new Request({ ...req.body, user: req.user._id });
   const createdRequest = await request.save();
+
+  // Create a notification
+  const requestedBook = await Book.findById(request.book);
+  await Notification.create({
+    sender: req.user._id,
+    receivers: [owner],
+    book,
+    message: `${req.user.name} requested ${requestedBook.title}`,
+    type: "Requested",
+  });
 
   res.status(201).json(createdRequest);
 });
@@ -99,6 +111,16 @@ export const updateRequestToArrived = asyncHandler(async (req, res) => {
     await owner.save();
     const updatedRequest = await request.save();
 
+    // Create a notification
+    const requestedBook = await Book.findById(request.book);
+    await Notification.create({
+      sender: req.user._id,
+      receivers: [request.owner],
+      book: requestedBook,
+      message: `${requestedBook.title} arrived to ${req.user.name} `,
+      type: "Accepted",
+    });
+
     res.status(200).json(updatedRequest);
   } else {
     res.status(404);
@@ -117,6 +139,17 @@ export const updateRequestToDelivered = asyncHandler(async (req, res) => {
     request.isDelivered = true;
     request.deliveredAt = Date.now();
     const updatedRequest = await request.save();
+
+    // Create a notification
+    const requestedBook = await Book.findById(request.book);
+    await Notification.create({
+      sender: req.user._id,
+      receivers: [request.user],
+      book: requestedBook,
+      message: `${req.user.name} delivered your book ${requestedBook.title}`,
+      type: "Accepted",
+    });
+
     res.status(200).json(updatedRequest);
   } else {
     res.status(404);
@@ -138,6 +171,17 @@ export const acceptRequest = asyncHandler(async (req, res) => {
 
     request.isAccepted = true;
     const updatedRequest = await request.save();
+
+    // Create a notification
+    const requestedBook = await Book.findById(request.book);
+    await Notification.create({
+      sender: req.user._id,
+      receivers: [request.owner],
+      book: requestedBook,
+      message: `${req.user.name} accepted the request for ${requestedBook.title}`,
+      type: "Accepted",
+    });
+
     res.status(200).json(updatedRequest);
   } else {
     res.status(404);
@@ -157,6 +201,16 @@ export const rejectRequest = asyncHandler(async (req, res) => {
 
   if (request) {
     await Request.deleteOne({ _id: req.params.id });
+
+    // Create a notification
+    const requestedBook = await Book.findById(request.book);
+    await Notification.create({
+      sender: req.user._id,
+      receivers: [request.owner],
+      book: requestedBook,
+      message: `${req.user.name} rejected you request for ${requestedBook.title}`,
+      type: "Rejected",
+    });
     res.status(200).json({ message: "Request rejected" });
   } else {
     res.status(404);
@@ -175,6 +229,17 @@ export const cancelRequest = asyncHandler(async (req, res) => {
     await Request.deleteOne({ _id: request._id });
     user.points = user.points + 1;
     await user.save();
+
+    // Create a notification
+    const requestedBook = await Book.findById(request.book);
+    await Notification.create({
+      sender: req.user._id,
+      receivers: [requestedBook.owner],
+      book: requestedBook,
+      message: `${req.user.name} canceled the request for ${requestedBook.title}`,
+      type: "Canceled",
+    });
+
     res.status(200).json({ message: "Request canceled" });
   } else {
     res.status(404);

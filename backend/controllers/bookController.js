@@ -1,5 +1,7 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import Book from "../models/bookModel.js";
+import Notification from "../models/notificationModel.js";
+import User from "../models/userModel.js";
 
 // @desc    Fetch all books
 // @route   GET /api/books
@@ -17,8 +19,6 @@ export const getBooks = asyncHandler(async (req, res) => {
 // @route   POST /api/books
 // @access  Public
 export const createBook = asyncHandler(async (req, res) => {
-  /* user, title, isbn, author, description, image, category */
-
   if (
     !req.body.title ||
     !req.body.isbn ||
@@ -33,6 +33,17 @@ export const createBook = asyncHandler(async (req, res) => {
 
   const book = new Book({ ...req.body, user: req.user._id });
   const createdBook = await book.save();
+
+  // Create a notification
+  const currentUser = await User.findById(req.user._id).select("followers");
+
+  await Notification.create({
+    sender: req.user._id,
+    receivers: currentUser.followers,
+    book: createdBook._id,
+    message: `${req.user.name} added a ${createBook.name}book`,
+    type: "Book Added",
+  });
 
   res.status(201).json(createdBook);
 });

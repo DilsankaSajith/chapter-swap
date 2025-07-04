@@ -130,6 +130,7 @@ const BookRequestsScreen = () => {
                       color="black"
                       isLoading={loadingReject}
                       onClick={() => rejectHandler(bookRequest._id)}
+                      disabled={bookRequest.isDelivered}
                     >
                       <HiTrash />
                     </Button>

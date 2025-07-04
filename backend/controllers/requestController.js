@@ -116,9 +116,10 @@ export const updateRequestToArrived = asyncHandler(async (req, res) => {
     await Notification.create({
       sender: req.user._id,
       receivers: [request.owner],
+      request: request._id,
       book: requestedBook,
       message: `${requestedBook.title} arrived to ${req.user.name} `,
-      type: "Accepted",
+      type: "Arrived",
     });
 
     res.status(200).json(updatedRequest);
@@ -146,8 +147,9 @@ export const updateRequestToDelivered = asyncHandler(async (req, res) => {
       sender: req.user._id,
       receivers: [request.user],
       book: requestedBook,
+      request: request._id,
       message: `${req.user.name} delivered your book ${requestedBook.title}`,
-      type: "Accepted",
+      type: "Delivered",
     });
 
     res.status(200).json(updatedRequest);
@@ -176,7 +178,7 @@ export const acceptRequest = asyncHandler(async (req, res) => {
     const requestedBook = await Book.findById(request.book);
     await Notification.create({
       sender: req.user._id,
-      receivers: [request.owner],
+      receivers: [request.user],
       book: requestedBook,
       message: `${req.user.name} accepted the request for ${requestedBook.title}`,
       type: "Accepted",
@@ -206,7 +208,7 @@ export const rejectRequest = asyncHandler(async (req, res) => {
     const requestedBook = await Book.findById(request.book);
     await Notification.create({
       sender: req.user._id,
-      receivers: [request.owner],
+      receivers: [request.user],
       book: requestedBook,
       message: `${req.user.name} rejected you request for ${requestedBook.title}`,
       type: "Rejected",

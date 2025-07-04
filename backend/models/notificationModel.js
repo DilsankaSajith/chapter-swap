@@ -17,8 +17,17 @@ const notificationSchema = mongoose.Schema(
       ref: "Book",
       required: false,
     },
+    request: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Request",
+      required: false,
+    },
     message: {
       type: String,
+    },
+    isRead: {
+      type: Boolean,
+      default: false,
     },
     type: {
       type: String,
@@ -34,9 +43,7 @@ const notificationSchema = mongoose.Schema(
       ],
     },
   },
-  {
-    timeStamps: true,
-  }
+  { timestamps: true }
 );
 
 const Notification = mongoose.model("Notification", notificationSchema);

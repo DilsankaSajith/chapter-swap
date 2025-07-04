@@ -35,11 +35,13 @@ export const createBook = asyncHandler(async (req, res) => {
   const createdBook = await book.save();
 
   // Create a notification
-  const currentUser = await User.findById(req.user._id).select("followers");
+  const currentUser = await User.findById(req.user._id);
+
+  console.log(currentUser);
 
   await Notification.create({
     sender: req.user._id,
-    receivers: currentUser.followers,
+    receivers: [...currentUser.followers, ...currentUser.follwings],
     book: createdBook._id,
     message: `${req.user.name} added a ${createBook.name}book`,
     type: "Book Added",

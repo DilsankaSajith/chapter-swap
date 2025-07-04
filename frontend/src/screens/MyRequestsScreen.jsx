@@ -96,6 +96,7 @@ const MyRequestsScreen = () => {
                       color="black"
                       isLoading={loadingReject}
                       onClick={() => cancelHandler(bookRequest._id)}
+                      disabled={bookRequest.isDelivered}
                     >
                       <HiTrash />
                     </Button>

@@ -57,18 +57,15 @@ const Header = () => {
                 <MenuButton
                   position="relative"
                   onClick={() => navigate("/chats")}
+                  width="36px"
+                  height="36px"
+                  bg="gray.dark"
+                  borderRadius="full"
+                  cursor="pointer"
+                  _hover={{ bg: "gray.700" }}
+                  transition="ease 0.1s"
                 >
-                  <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    width="36px"
-                    height="36px"
-                    bg="gray.dark"
-                    borderRadius="full"
-                    cursor="pointer"
-                    _hover={{ bg: "gray.700" }}
-                    transition="ease 0.3s"
-                  >
+                  <Flex alignItems="center" justifyContent="center">
                     <FaFacebookMessenger className="nav-icon" />
                   </Flex>
                   {notifications.length > 0 && (
@@ -110,14 +107,7 @@ const Header = () => {
                   ))}
                 </MenuList>
               </Menu>
-
               <Notification />
-              <Avatar
-                size="sm"
-                name={userInfo?.name}
-                src={userInfo?.profilePicture}
-              />
-
               <Menu>
                 <MenuButton
                   borderRadius="sm"
@@ -126,7 +116,14 @@ const Header = () => {
                   bg="gray.dark"
                   _hover={{ bg: "gray.700" }}
                 >
-                  {userInfo.name}
+                  <Flex alignItems="center" gap={2}>
+                    <Avatar
+                      size="sm"
+                      name={userInfo?.name}
+                      src={userInfo?.profilePicture}
+                    />
+                    <Text>{userInfo.name}</Text>
+                  </Flex>
                 </MenuButton>
                 <MenuList>
                   <Link to="/profile">

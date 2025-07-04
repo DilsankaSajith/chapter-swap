@@ -5,3 +5,4 @@ export const REQUESTS_URL = "/api/requests";
 export const CHATUSERS_URL = "/api/chats/users";
 export const CHATS_URL = "/api/chats";
 export const MESSAGES_URL = "/api/messages";
+export const NOTIFICATIONS_URL = "/api/notifications";

@@ -13,18 +13,18 @@ import {
   Tooltip,
   useDisclosure,
   useToast,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { HiMagnifyingGlass } from "react-icons/hi2";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { HiMagnifyingGlass } from 'react-icons/hi2';
 import {
   useAccessChatMutation,
   useGetUsersQuery,
-} from "../../slices/chatApiSlice";
-import UserListItem from "./UserListItem";
-import { ChatState } from "../../context/ChatProvider";
+} from '../../slices/chatApiSlice';
+import UserListItem from './UserListItem';
+import { ChatState } from '../../context/ChatProvider';
 
 const SideDrawer = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [users, setUsers] = useState([]);
 
   const { selectedChat, setSelectedChat, chats, setChats } = ChatState();
@@ -39,11 +39,11 @@ const SideDrawer = () => {
   const handleSubmit = async () => {
     if (!search) {
       toast({
-        title: "Please enter something in search",
-        status: "warning",
+        title: 'Please enter something in search',
+        status: 'warning',
         duration: 3000,
         isClosable: true,
-        position: "top",
+        position: 'top',
       });
       return;
     }
@@ -63,7 +63,7 @@ const SideDrawer = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err?.error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -72,21 +72,21 @@ const SideDrawer = () => {
 
   return (
     <>
-      <Box>
+      <Box mb={3}>
         <Tooltip label="Search users to chat" hasArrow placement="bottom-end">
           <Button
             variant="ghost"
             leftIcon={<HiMagnifyingGlass />}
             onClick={onOpen}
           >
-            <Text d={{ base: "none", md: "flex" }}>Search user</Text>
+            <Text d={{ base: 'none', md: 'flex' }}>Search user</Text>
           </Button>
         </Tooltip>
       </Box>
 
       <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
         <DrawerOverlay />
-        <DrawerContent bg={"gray.dark"}>
+        <DrawerContent bg={'gray.dark'}>
           <DrawerCloseButton />
           <DrawerHeader>Join with friends</DrawerHeader>
 
@@ -103,7 +103,7 @@ const SideDrawer = () => {
                 borderRadius="sm"
                 size="md"
                 bg="accent.default"
-                _hover={{ bg: "accent.event" }}
+                _hover={{ bg: 'accent.event' }}
                 color="black"
                 borderLeftRadius={0}
                 onClick={handleSubmit}

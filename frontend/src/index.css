@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Joan&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Joan&display=swap');
 
 .nav-icon {
   width: 20px;
@@ -36,3 +36,16 @@
   border-radius: 50%;
   background-color: #0bea7a;
 }
+
+.adminTable {
+  background-color: #161c23;
+  padding-inline: 6px;
+  border: 1px solid #2a3035;
+  border-radius: 8px;
+}
+
+/* bg="gray.dark"
+      p={6}
+      borderRadius="sm"
+      border="1px"
+      borderColor="gray.light" */

@@ -1,7 +1,7 @@
-import { Box, Spinner, Text, VStack } from "@chakra-ui/react";
-import FollowUser from "./FollowUser";
-import { useGetAllUsersQuery } from "../slices/usersApiSlice";
-import { useSelector } from "react-redux";
+import { Box, Skeleton, Spinner, Stack, Text, VStack } from '@chakra-ui/react';
+import FollowUser from './FollowUser';
+import { useGetAllUsersQuery } from '../slices/usersApiSlice';
+import { useSelector } from 'react-redux';
 
 const UserSuggests = () => {
   const { userInfo } = useSelector((store) => store.auth);
@@ -20,7 +20,12 @@ const UserSuggests = () => {
       </Text>
 
       {isLoading ? (
-        <Spinner />
+        <Stack>
+          <Skeleton height="50px" />
+          <Skeleton height="50px" />
+          <Skeleton height="50px" />
+          <Skeleton height="50px" />
+        </Stack>
       ) : (
         <VStack gap="16px">
           {users

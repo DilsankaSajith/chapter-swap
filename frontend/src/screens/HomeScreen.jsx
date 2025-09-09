@@ -21,35 +21,35 @@ import {
   Spinner,
   FormLabel,
   useToast,
-} from "@chakra-ui/react";
-import { FaPlus } from "react-icons/fa6";
-import axios from "axios";
-import UserSuggests from "../components/UserSuggests";
-import Book from "../components/Book";
-import SearchResult from "../components/SearchResult";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { FaPlus } from 'react-icons/fa6';
+import axios from 'axios';
+import UserSuggests from '../components/UserSuggests';
+import Book from '../components/Book';
+import SearchResult from '../components/SearchResult';
+import { useState } from 'react';
 import {
   useCreateBookMutation,
   useGetBooksQuery,
-} from "../slices/booksApiSlice";
-import { useNavigate, useParams } from "react-router-dom";
-import SearchBox from "../components/SearchBox";
-import { useSelector } from "react-redux";
-import Sidebar from "../components/Sidebar";
-import ImageSlider from "../components/ImageSlider";
+} from '../slices/booksApiSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import SearchBox from '../components/SearchBox';
+import { useSelector } from 'react-redux';
+import Sidebar from '../components/Sidebar';
+import ImageSlider from '../components/ImageSlider';
 
 const HomeScreen = () => {
   const [searchedBooks, setSearchedBooks] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoadingApi, setIsLoadingApi] = useState(false);
 
   // Add book manual states
-  const [title, setTitle] = useState("");
-  const [isbn, setIsbn] = useState("");
-  const [author, setAuthor] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState('');
+  const [isbn, setIsbn] = useState('');
+  const [author, setAuthor] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState('');
+  const [category, setCategory] = useState('');
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const { keyword } = useParams();
@@ -87,14 +87,14 @@ const HomeScreen = () => {
 
     setUploadingImage(true);
     const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "chapterswap");
-    data.append("cloud_name", "deqbtjlgk");
+    data.append('file', file);
+    data.append('upload_preset', 'chapterswap');
+    data.append('cloud_name', 'deqbtjlgk');
 
     const res = await fetch(
-      "https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload",
+      'https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload',
       {
-        method: "POST",
+        method: 'POST',
         body: data,
       }
     );
@@ -108,12 +108,12 @@ const HomeScreen = () => {
     try {
       if (!userInfo) {
         toast({
-          title: "You have to sign in to perform this action",
-          status: "error",
+          title: 'You have to sign in to perform this action',
+          status: 'error',
           duration: 3000,
           isClosable: true,
         });
-        navigate("/login");
+        navigate('/login');
         return;
       }
 
@@ -128,8 +128,8 @@ const HomeScreen = () => {
 
       await createBookAPI(newBook).unwrap();
       toast({
-        title: "Book added",
-        status: "success",
+        title: 'Book added',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -138,7 +138,7 @@ const HomeScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -197,7 +197,7 @@ const HomeScreen = () => {
           <VStack w="full" px="25px" pb="25px">
             <Button
               bg="accent.default"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               w="full"
               borderRadius="sm"
@@ -232,7 +232,7 @@ const HomeScreen = () => {
           <ModalFooter display="flex" flexDir="column" gap={3}>
             <Button
               bg="accent.default"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               width="full"
               onClick={() => getSearchedBooks()}
@@ -242,7 +242,7 @@ const HomeScreen = () => {
             </Button>
             <Button
               bg="accent.default"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               width="full"
               onClick={() => {
@@ -281,7 +281,15 @@ const HomeScreen = () => {
         </ModalContent>
       </Modal>
       {isLoading ? (
-        <Spinner p="24px" m="64px" />
+        <div className="flex w-50vw h-[500px] items-center justify-center">
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.dark"
+            color="accent.default"
+            size="xl"
+          />
+        </div>
       ) : error ? (
         <Text>{error.data?.message}</Text>
       ) : (
@@ -298,7 +306,7 @@ const HomeScreen = () => {
               bg="accent.default"
               borderRadius="full"
               cursor="pointer"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               transition="ease 0.2s"
               onClick={onOpen}
@@ -312,7 +320,7 @@ const HomeScreen = () => {
             <GridItem
               as="aside"
               colSpan={1}
-              display={{ base: "none", lg: "block" }}
+              display={{ base: 'none', lg: 'block' }}
             >
               <Sidebar />
             </GridItem>

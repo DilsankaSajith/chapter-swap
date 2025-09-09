@@ -11,15 +11,15 @@ import {
   MenuList,
   MenuItem,
   Badge,
-} from "@chakra-ui/react";
-import { Link, useNavigate } from "react-router-dom";
-import { useLogoutMutation } from "../slices/usersApiSlice";
-import { FaBell, FaFacebookMessenger, FaChevronDown } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../slices/authSlice";
-import { ChatState } from "../context/ChatProvider";
-import { getSender } from "../utils/helpers";
-import Notification from "./Notification";
+} from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLogoutMutation } from '../slices/usersApiSlice';
+import { FaBell, FaFacebookMessenger, FaChevronDown } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../slices/authSlice';
+import { ChatState } from '../context/ChatProvider';
+import { getSender } from '../utils/helpers';
+import Notification from './Notification';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const Header = () => {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
-      navigate("/login");
+      navigate('/login');
     } catch (error) {
       console.log(error);
     }
@@ -46,23 +46,23 @@ const Header = () => {
       <Container maxWidth="6xl" py="2">
         <Flex alignItems="center" justifyContent="space-between">
           <Link to="/">
-            <Text fontSize="xl" fontWeight="medium">
-              ChapterSwap
+            <Text fontSize="xl" fontWeight="bold">
+              Chapter<span className="text-[#20B46A]">Swap</span>
             </Text>
           </Link>
 
           {userInfo ? (
-            <HStack>
+            <div className="flex items-center gap-2">
               <Menu>
                 <MenuButton
                   position="relative"
-                  onClick={() => navigate("/chats")}
+                  onClick={() => navigate('/chats')}
                   width="36px"
                   height="36px"
                   bg="gray.dark"
                   borderRadius="full"
                   cursor="pointer"
-                  _hover={{ bg: "gray.700" }}
+                  _hover={{ bg: 'gray.700' }}
                   transition="ease 0.1s"
                 >
                   <Flex alignItems="center" justifyContent="center">
@@ -87,7 +87,7 @@ const Header = () => {
                   )}
                 </MenuButton>
                 <MenuList>
-                  {!notifications.length && "No new messages"}
+                  {!notifications.length && 'No new messages'}
                   {notifications.map((notif) => (
                     <MenuItem
                       key={notif._id}
@@ -108,13 +108,20 @@ const Header = () => {
                 </MenuList>
               </Menu>
               <Notification />
+              <div className="hidden sm:flex">
+                {userInfo?.isAdmin && (
+                  <Button variant="ghost">
+                    <Link to="/admin"> Dashboard ✨</Link>
+                  </Button>
+                )}
+              </div>
               <Menu>
                 <MenuButton
                   borderRadius="sm"
                   as={Button}
                   rightIcon={<FaChevronDown />}
                   bg="gray.dark"
-                  _hover={{ bg: "gray.700" }}
+                  _hover={{ bg: 'gray.700' }}
                 >
                   <Flex alignItems="center" gap={2}>
                     <Avatar
@@ -138,17 +145,16 @@ const Header = () => {
                   <Link to="/favorites">
                     <MenuItem>Saved</MenuItem>
                   </Link>
-
                   <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                 </MenuList>
               </Menu>
-            </HStack>
+            </div>
           ) : (
             <HStack gap={4}>
               <Link to="/login">
                 <Text
                   fontWeight="medium"
-                  _hover={{ color: "gray.300" }}
+                  _hover={{ color: 'gray.300' }}
                   transition="ease 0.3s"
                 >
                   Sign in
@@ -157,13 +163,13 @@ const Header = () => {
               <Link to="/register">
                 <Text
                   bg="accent.default"
-                  _hover={{ bg: "accent.event" }}
+                  _hover={{ bg: 'accent.event' }}
                   color="black"
                   fontWeight="medium"
                   transition="ease 0.3s"
                   borderRadius="sm"
-                  paddingX={"10px"}
-                  paddingY={"5px"}
+                  paddingX={'10px'}
+                  paddingY={'5px'}
                 >
                   Join now
                 </Text>

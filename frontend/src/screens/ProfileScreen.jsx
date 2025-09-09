@@ -18,11 +18,11 @@ import {
   FormLabel,
   Input,
   Spinner,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useGetBooksQuery } from "../slices/booksApiSlice";
-import { useMyProfileQuery, useProfileMutation } from "../slices/usersApiSlice";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useGetBooksQuery } from '../slices/booksApiSlice';
+import { useMyProfileQuery, useProfileMutation } from '../slices/usersApiSlice';
 
 const ProfileScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
@@ -32,7 +32,7 @@ const ProfileScreen = () => {
   const [updateProfile, { isLoading: loadingUpdate }] = useProfileMutation();
 
   const [name, setName] = useState(userInfo.name);
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState('');
   const [email, setEmail] = useState(userInfo.email);
   const [phone, setPhone] = useState(userInfo.phone);
   const [address, setAddress] = useState(userInfo.address);
@@ -60,8 +60,8 @@ const ProfileScreen = () => {
         postalCode,
       });
       toast({
-        title: "Details updated",
-        status: "success",
+        title: 'Details updated',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -70,7 +70,7 @@ const ProfileScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -85,14 +85,14 @@ const ProfileScreen = () => {
 
     setImageUploading(true);
     const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "chapterswap");
-    data.append("cloud_name", "deqbtjlgk");
+    data.append('file', file);
+    data.append('upload_preset', 'chapterswap');
+    data.append('cloud_name', 'deqbtjlgk');
 
     const res = await fetch(
-      "https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload",
+      'https://api.cloudinary.com/v1_1/deqbtjlgk/image/upload',
       {
-        method: "POST",
+        method: 'POST',
         body: data,
       }
     );
@@ -116,7 +116,7 @@ const ProfileScreen = () => {
             </FormControl>
             <FormControl>
               <Text mb="1">
-                {imageUploading ? "Uploading..." : "Profile picture"}
+                {imageUploading ? 'Uploading...' : 'Profile picture'}
               </Text>
               <Input
                 type="file"
@@ -160,7 +160,7 @@ const ProfileScreen = () => {
           <VStack w="full" px="25px" pb="25px">
             <Button
               bg="accent.default"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               w="full"
               borderRadius="sm"
@@ -179,7 +179,7 @@ const ProfileScreen = () => {
       {loadingUser ? (
         <Spinner />
       ) : (
-        <Flex direction={{ base: "column", md: "row" }} gap="10px">
+        <Flex direction={{ base: 'column', md: 'row' }} gap="10px">
           <Box
             display="flex"
             alignItems="center"
@@ -237,7 +237,7 @@ const ProfileScreen = () => {
               size="sm"
               borderRadius="sm"
               mt={8}
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               onClick={onOpen}
             >
               Edit Details

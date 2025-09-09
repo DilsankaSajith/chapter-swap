@@ -6,15 +6,15 @@ import {
   MenuList,
   Spinner,
   Text,
-} from "@chakra-ui/react";
-import { FaBell } from "react-icons/fa";
-import NotificationBadge from "./NotificationBadge";
+} from '@chakra-ui/react';
+import { FaBell } from 'react-icons/fa';
+import NotificationBadge from './NotificationBadge';
 import {
   useGetAllNotificationsQuery,
   useReadNotificationMutation,
-} from "../slices/notificationApiSlice";
-import NotificationItem from "./NotificationItem";
-import { Link } from "react-router-dom";
+} from '../slices/notificationApiSlice';
+import NotificationItem from './NotificationItem';
+import { Link } from 'react-router-dom';
 
 const Notification = () => {
   const {
@@ -37,7 +37,7 @@ const Notification = () => {
   return (
     <Menu>
       {isLoading ? (
-        <Spinner />
+        <></>
       ) : (
         <>
           <MenuButton
@@ -47,7 +47,7 @@ const Notification = () => {
             bg="gray.dark"
             borderRadius="full"
             cursor="pointer"
-            _hover={{ bg: "gray.700" }}
+            _hover={{ bg: 'gray.700' }}
             transition="ease 0.1s"
           >
             <Flex alignItems="center" justifyContent="center">
@@ -66,21 +66,21 @@ const Notification = () => {
                 <Link
                   key={notification._id}
                   to={
-                    notification.type === "Followed"
+                    notification.type === 'Followed'
                       ? `/profile/${notification.sender._id}`
-                      : notification.type === "Book Added"
+                      : notification.type === 'Book Added'
                       ? `/book/${notification.book._id}`
-                      : notification.type === "Requested"
-                      ? "/bookRequests"
-                      : notification.type === "Accepted"
-                      ? "/myRequests"
-                      : notification.type === "Delivered" ||
-                        notification.type === "Arrived"
+                      : notification.type === 'Requested'
+                      ? '/bookRequests'
+                      : notification.type === 'Accepted'
+                      ? '/myRequests'
+                      : notification.type === 'Delivered' ||
+                        notification.type === 'Arrived'
                       ? `/requests/${notification.request}`
-                      : notification.type === "Canceled" ||
-                        notification.type === "Rejected"
-                      ? ""
-                      : ""
+                      : notification.type === 'Canceled' ||
+                        notification.type === 'Rejected'
+                      ? ''
+                      : ''
                   }
                   onClick={() => markAsRead(notification._id)}
                 >

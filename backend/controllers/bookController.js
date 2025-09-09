@@ -1,17 +1,19 @@
-import asyncHandler from "../middleware/asyncHandler.js";
-import Book from "../models/bookModel.js";
-import Notification from "../models/notificationModel.js";
-import User from "../models/userModel.js";
+import asyncHandler from '../middleware/asyncHandler.js';
+import Book from '../models/bookModel.js';
+import Notification from '../models/notificationModel.js';
+import User from '../models/userModel.js';
 
 // @desc    Fetch all books
 // @route   GET /api/books
 // @access  Public
 export const getBooks = asyncHandler(async (req, res) => {
   const keyword = req.query.keyword
-    ? { title: { $regex: req.query.keyword, $options: "i" } }
+    ? { title: { $regex: req.query.keyword, $options: 'i' } }
     : {};
 
-  const books = await Book.find({ ...keyword }).sort({ createdAt: -1 });
+  const books = await Book.find({ ...keyword })
+    .sort({ createdAt: -1 })
+    .populate('user', 'name email');
   res.status(200).json(books);
 });
 
@@ -28,7 +30,7 @@ export const createBook = asyncHandler(async (req, res) => {
     !req.body.category
   ) {
     res.status(400);
-    throw new Error("Please fill all fields");
+    throw new Error('Please fill all fields');
   }
 
   const book = new Book({ ...req.body, user: req.user._id });
@@ -44,7 +46,7 @@ export const createBook = asyncHandler(async (req, res) => {
     receivers: [...currentUser.followers, ...currentUser.follwings],
     book: createdBook._id,
     message: `${req.user.name} added a ${createBook.name}book`,
-    type: "Book Added",
+    type: 'Book Added',
   });
 
   res.status(201).json(createdBook);
@@ -55,8 +57,8 @@ export const createBook = asyncHandler(async (req, res) => {
 // @access  Public
 export const getBookById = asyncHandler(async (req, res) => {
   const book = await Book.findById(req.params.id).populate(
-    "user",
-    "_id name profilePicture"
+    'user',
+    '_id name profilePicture'
   );
 
   if (book) {
@@ -64,7 +66,7 @@ export const getBookById = asyncHandler(async (req, res) => {
   }
 
   res.status(404);
-  throw new Error("Resource not found");
+  throw new Error('Resource not found');
 });
 
 // @desc    Update a book
@@ -85,7 +87,7 @@ export const updateBook = asyncHandler(async (req, res) => {
     res.status(200).json(updatedBook);
   } else {
     res.status(404);
-    throw new Error("Resource not found");
+    throw new Error('Resource not found');
   }
 });
 
@@ -97,10 +99,10 @@ export const deleteBook = asyncHandler(async (req, res) => {
 
   if (book) {
     await Book.deleteOne({ _id: book._id });
-    res.status(200).json({ message: "Book deleted" });
+    res.status(200).json({ message: 'Book deleted' });
   } else {
     res.status(404);
-    throw new Error("Resource not found");
+    throw new Error('Resource not found');
   }
 });
 
@@ -118,7 +120,7 @@ export const createBookReview = asyncHandler(async (req, res) => {
 
     if (alreadyReviewed) {
       res.status(400);
-      throw new Error("Book already reviewed");
+      throw new Error('Book already reviewed');
     }
 
     const review = {
@@ -135,10 +137,10 @@ export const createBookReview = asyncHandler(async (req, res) => {
       book.reviews.length;
 
     await book.save();
-    res.status(201).json({ message: "Review added" });
+    res.status(201).json({ message: 'Review added' });
   } else {
     res.status(404);
-    throw new Error("Resource not found");
+    throw new Error('Resource not found');
   }
 });
 
@@ -159,14 +161,14 @@ export const addToFavorite = asyncHandler(async (req, res) => {
   if (book) {
     if (!book.favoritedBy.includes(req.user._id)) {
       await book.updateOne({ $push: { favoritedBy: req.user._id } });
-      res.status(200).json({ message: "Book has been added to favorites" });
+      res.status(200).json({ message: 'Book has been added to favorites' });
     } else {
       await book.updateOne({ $pull: { favoritedBy: req.user._id } });
-      res.status(200).json({ message: "Book has been removed from favorites" });
+      res.status(200).json({ message: 'Book has been removed from favorites' });
     }
   } else {
     res.status(404);
-    throw new Error("Resource not found");
+    throw new Error('Resource not found');
   }
 });
 
@@ -177,7 +179,7 @@ export const addToFavorite = asyncHandler(async (req, res) => {
 export const getFavoriteBooks = asyncHandler(async (req, res) => {
   const books = await Book.find({ favoritedBy: req.user._id });
   if (!books) {
-    res.status(400).json({ message: "No books in favorites" });
+    res.status(400).json({ message: 'No books in favorites' });
   }
   res.status(200).json(books);
 });

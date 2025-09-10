@@ -25,14 +25,14 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
-import { FaStar, FaEdit, FaTrash } from "react-icons/fa";
-import { HiMiniCog6Tooth } from "react-icons/hi2";
-import { useSelector } from "react-redux";
-import { useDeleteBookMutation } from "../slices/booksApiSlice";
-import { useState } from "react";
-import { useUpdateBookMutation } from "../slices/booksApiSlice";
+} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import { FaStar, FaEdit, FaTrash } from 'react-icons/fa';
+import { HiMiniCog6Tooth } from 'react-icons/hi2';
+import { useSelector } from 'react-redux';
+import { useDeleteBookMutation } from '../slices/booksApiSlice';
+import { useState } from 'react';
+import { useUpdateBookMutation } from '../slices/booksApiSlice';
 
 const Book = ({ book }) => {
   const [title, setTitle] = useState(book.title);
@@ -60,8 +60,8 @@ const Book = ({ book }) => {
         category,
       });
       toast({
-        title: "Book updated",
-        status: "success",
+        title: 'Book updated',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -69,7 +69,7 @@ const Book = ({ book }) => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -78,19 +78,19 @@ const Book = ({ book }) => {
   };
 
   const deleteHandler = async (id) => {
-    if (window.confirm("Are you sure?")) {
+    if (window.confirm('Are you sure?')) {
       try {
         await deleteBook(id).unwrap();
         toast({
-          title: "Book removed",
-          status: "success",
+          title: 'Book removed',
+          status: 'success',
           duration: 3000,
           isClosable: true,
         });
       } catch (err) {
         toast({
           title: err?.data?.message || err.message,
-          status: "error",
+          status: 'error',
           duration: 3000,
           isClosable: true,
         });
@@ -140,7 +140,7 @@ const Book = ({ book }) => {
           <VStack w="full" px="25px" pb="25px">
             <Button
               bg="accent.default"
-              _hover={{ bg: "accent.event" }}
+              _hover={{ bg: 'accent.event' }}
               color="black"
               w="full"
               borderRadius="sm"
@@ -164,7 +164,7 @@ const Book = ({ book }) => {
           border="1px"
           borderColor="gray.light"
           transition="ease 0.3s"
-          _hover={{ bg: "gray.800" }}
+          _hover={{ bg: 'gray.800' }}
         >
           <Box w="full" h="120px" overflow="hidden">
             <Image src={book.image} alt="book1" borderRadius="sm" />
@@ -186,13 +186,13 @@ const Book = ({ book }) => {
             </Text>
 
             <Flex alignItems="center" gap="8px">
-              <FaStar style={{ color: "#ffbc03" }} />
+              <FaStar style={{ color: '#ffbc03' }} />
               <span>{book.rating}</span>
             </Flex>
           </Box>
         </Box>
       </Link>
-      {userInfo?._id === book.user && (
+      {userInfo?._id === book.user._id || userInfo?.isAdmin ? (
         <Stack direction="row" position="absolute" top={1} right={1}>
           <Menu>
             <MenuButton>
@@ -204,7 +204,7 @@ const Book = ({ book }) => {
                 bg="accent.default"
                 borderRadius="full"
                 cursor="pointer"
-                _hover={{ bg: "accent.event" }}
+                _hover={{ bg: 'accent.event' }}
                 transition="ease 0.3s"
                 color="#000"
                 boxShadow="lg"
@@ -219,7 +219,7 @@ const Book = ({ book }) => {
                   deleteHandler(book._id);
                 }}
               >
-                {loadingDelete ? <Spinner /> : "Delete"}
+                {loadingDelete ? <Spinner /> : 'Delete'}
               </MenuItem>
             </MenuList>
           </Menu>
@@ -232,6 +232,8 @@ const Book = ({ book }) => {
             {loadingDelete ? <Spinner /> : <FaTrash />}
           </Button> */}
         </Stack>
+      ) : (
+        <></>
       )}
     </Box>
   );

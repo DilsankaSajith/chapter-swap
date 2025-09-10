@@ -1,11 +1,11 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from 'mongoose';
 
 const reviewSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
     name: {
       type: String,
@@ -28,7 +28,7 @@ const bookSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User",
+      ref: 'User',
     },
     title: {
       type: String,
@@ -74,5 +74,5 @@ const bookSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const Book = mongoose.model("Book", bookSchema);
+const Book = mongoose.model('Book', bookSchema);
 export default Book;

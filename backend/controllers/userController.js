@@ -1,7 +1,9 @@
-import asyncHandler from "../middleware/asyncHandler.js";
-import User from "../models/userModel.js";
-import Notification from "../models/notificationModel.js";
-import generateToken from "../utils/generateToken.js";
+import asyncHandler from '../middleware/asyncHandler.js';
+import User from '../models/userModel.js';
+import Book from '../models/bookModel.js';
+import Request from '../models/requestModel.js';
+import Notification from '../models/notificationModel.js';
+import generateToken from '../utils/generateToken.js';
 
 // @desc    Register user
 // @route   POST /api/users
@@ -33,17 +35,17 @@ export const registerUser = asyncHandler(async (req, res) => {
     !password
   ) {
     res.status(400);
-    throw new Error("Please fill all fields");
+    throw new Error('Please fill all fields');
   }
 
   if (userExists) {
     res.status(400);
-    throw new Error("User already exists");
+    throw new Error('User already exists');
   }
 
   if (phoneExists) {
     res.status(400);
-    throw new Error("Phone number already exists");
+    throw new Error('Phone number already exists');
   }
 
   const user = await User.create({
@@ -63,7 +65,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json(user);
   } else {
     res.status(400);
-    throw new Error("Invalid user data");
+    throw new Error('Invalid user data');
   }
 });
 
@@ -80,7 +82,7 @@ export const authUser = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   } else {
     res.status(401);
-    throw new Error("Invalid email or password");
+    throw new Error('Invalid email or password');
   }
 });
 
@@ -88,25 +90,25 @@ export const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/logout
 // @access  Private
 export const logout = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
+  res.cookie('jwt', '', {
     httpOnly: true,
     expiresIn: new Date(0),
   });
 
-  res.status(200).json({ message: "Logged out successfully" });
+  res.status(200).json({ message: 'Logged out successfully' });
 });
 
 // @desc    Get user profile
 // @route   GET /api/users/profile
 // @access  Private
 export const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id).select("-password");
+  const user = await User.findById(req.user._id).select('-password');
 
   if (user) {
     res.status(200).json(user);
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 });
 
@@ -120,7 +122,7 @@ export const getOtherUserProfile = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 });
 
@@ -139,6 +141,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     user.city = req.body.city || user.city;
     user.state = req.body.state || user.state;
     user.postalCode = req.body.postalCode || user.postalCode;
+    user.isAdmin = req.body.isAdmin || user.isAdmin;
 
     if (req.body.password) {
       user.password = req.body.password || user.password;
@@ -149,7 +152,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     res.status(200).json(updatedUser);
   } else {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error('User not found');
   }
 });
 
@@ -170,17 +173,17 @@ export const followUser = asyncHandler(async (req, res) => {
         sender: currentUser._id,
         receivers: [user._id],
         message: `${currentUser.name} started following you`,
-        type: "Followed",
+        type: 'Followed',
       });
 
-      res.status(200).json({ message: "User has been followed" });
+      res.status(200).json({ message: 'User has been followed' });
     } else {
       res.status(403);
-      throw new Error("You already followed this user");
+      throw new Error('You already followed this user');
     }
   } else {
     res.status(403);
-    throw new Error("You cant follow yourself");
+    throw new Error('You cant follow yourself');
   }
 });
 
@@ -195,14 +198,14 @@ export const unfollowUser = asyncHandler(async (req, res) => {
     if (user.followers.includes(req.user._id)) {
       await user.updateOne({ $pull: { followers: req.user._id } });
       await currentUser.updateOne({ $pull: { follwings: user._id } });
-      res.status(200).json({ message: "User has been unfollowed" });
+      res.status(200).json({ message: 'User has been unfollowed' });
     } else {
       res.status(403);
-      throw new Error("You do not follow this user");
+      throw new Error('You do not follow this user');
     }
   } else {
     res.status(403);
-    throw new Error("You cant unfollow yourself");
+    throw new Error('You cant unfollow yourself');
   }
 });
 
@@ -213,4 +216,49 @@ export const unfollowUser = asyncHandler(async (req, res) => {
 export const getAllUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
   res.status(200).json(users);
+});
+
+// @desc    Make user admin
+// @route   PUT /api/users/:id
+// @access  Admin
+export const makeAdmin = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  user.isAdmin = !user.isAdmin;
+  const updatedUser = await user.save();
+  res.status(200).json(updatedUser);
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Admin
+export const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  await Book.deleteMany({ user: user._id });
+  await Notification.deleteMany({
+    $or: [{ sender: user._id }, { receivers: user._id }],
+  });
+  await User.updateMany(
+    { followers: user._id },
+    { $pull: { followers: user._id } }
+  );
+  await User.updateMany(
+    { follwings: user._id },
+    { $pull: { follwings: user._id } }
+  );
+  await Request.deleteMany({ user: user._id });
+
+  const deletedUser = await User.findByIdAndDelete(user._id);
+  res.status(200).json(deletedUser);
 });

@@ -1,70 +1,98 @@
-import { USERS_URL } from "../constants";
-import { apiSlice } from "./apiSlice";
+import { REPORTS_URL, USERS_URL } from '../constants';
+import { apiSlice } from './apiSlice';
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (data) => ({
         url: USERS_URL,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     login: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/auth`,
-        method: "POST",
+        method: 'POST',
         body: data,
       }),
     }),
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
-        method: "POST",
+        method: 'POST',
       }),
     }),
     profile: builder.mutation({
       query: (data) => ({
         url: `${USERS_URL}/profile`,
-        method: "PUT",
+        method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
+    }),
+    makeAdmin: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['User'],
+    }),
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `${USERS_URL}/${userId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['User'],
     }),
     myProfile: builder.query({
       query: () => ({
         url: `${USERS_URL}/profile`,
       }),
-      providesTags: ["User"],
+      providesTags: ['User'],
       keepUnusedDataFor: 5,
     }),
     getOtherProfile: builder.query({
       query: (profileId) => ({
         url: `${USERS_URL}/${profileId}`,
       }),
-      providesTags: ["User"],
+      providesTags: ['User'],
       keepUnusedDataFor: 5,
     }),
     getAllUsers: builder.query({
       query: () => ({
         url: USERS_URL,
       }),
-      providesTags: ["User"],
+      providesTags: ['User'],
       keepUnusedDataFor: 5,
     }),
     followUser: builder.mutation({
       query: (userId) => ({
         url: `${USERS_URL}/${userId}/follow`,
-        method: "PUT",
+        method: 'PUT',
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
     }),
     unfollowUser: builder.mutation({
       query: (userId) => ({
         url: `${USERS_URL}/${userId}/unfollow`,
-        method: "PUT",
+        method: 'PUT',
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ['User'],
+    }),
+    getReports: builder.query({
+      query: () => ({
+        url: REPORTS_URL,
+      }),
+      providesTags: ['Report'],
+      keepUnusedDataFor: 5,
+    }),
+    createReport: builder.mutation({
+      query: (data) => ({
+        url: REPORTS_URL,
+        method: 'POST',
+        body: data,
+      }),
     }),
   }),
 });
@@ -79,4 +107,8 @@ export const {
   useFollowUserMutation,
   useUnfollowUserMutation,
   useGetOtherProfileQuery,
+  useMakeAdminMutation,
+  useDeleteUserMutation,
+  useGetReportsQuery,
+  useCreateReportMutation,
 } = usersApiSlice;

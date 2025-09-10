@@ -37,7 +37,7 @@ const Notification = () => {
   return (
     <Menu>
       {isLoading ? (
-        <></>
+        <p>Loading...</p>
       ) : (
         <>
           <MenuButton

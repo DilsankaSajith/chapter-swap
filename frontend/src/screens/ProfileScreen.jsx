@@ -18,16 +18,24 @@ import {
   FormLabel,
   Input,
   Spinner,
+  Grid,
+  GridItem,
+  SimpleGrid,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useGetBooksQuery } from '../slices/booksApiSlice';
 import { useMyProfileQuery, useProfileMutation } from '../slices/usersApiSlice';
+import Book from '../components/Book';
 
 const ProfileScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
 
-  const { data: books, isLoading, error, refetch } = useGetBooksQuery();
+  const {
+    data: books,
+    isLoading: loadingBooks,
+    refetch,
+  } = useGetBooksQuery('');
   const { data: user, isLoading: loadingUser } = useMyProfileQuery();
   const [updateProfile, { isLoading: loadingUpdate }] = useProfileMutation();
 
@@ -101,6 +109,24 @@ const ProfileScreen = () => {
     setProfilePicture(uploadedImageURL.url);
     setImageUploading(false);
   };
+
+  if (loadingBooks || loadingUser || loadingUpdate) {
+    return (
+      <div className="w-[70vw] h-[500px] flex items-center justify-center">
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.dark"
+          color="accent.default"
+          size="xl"
+        />
+      </div>
+    );
+  }
+
+  const myBooks = books.filter((book) => book.user._id === userInfo._id);
+
+  console.log(myBooks);
 
   return (
     <>
@@ -176,75 +202,82 @@ const ProfileScreen = () => {
         </ModalContent>
       </Modal>
 
-      {loadingUser ? (
-        <Spinner />
-      ) : (
-        <Flex direction={{ base: 'column', md: 'row' }} gap="10px">
-          <Box
-            display="flex"
-            alignItems="center"
-            flexDir="column"
-            bg="gray.dark"
-            p={6}
-            borderRadius="md"
-            border="1px"
-            borderColor="gray.light"
-          >
-            <Box position="relative">
-              <Avatar
-                size="2xl"
-                name={user.name}
-                src={user.profilePicture}
-                mb={3}
-              />
-              {/* <EditProfileButton /> */}
-            </Box>
-            <Text fontSize="2xl" fontWeight="medium">
-              {user.name}
-            </Text>
-            <Text color="gray.500">
-              {user.email} | {user.phone}
-            </Text>
-            <Text color="gray.500">
-              {user.address}, {user.city}, {user.state}
-            </Text>
-
-            <HStack alignItems="center" gap={4} my={6}>
-              <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">{user.points}</Text>
-                <Text>Points</Text>
-              </VStack>
-              <Text fontSize="3xl" fontWeight="thin">
-                |
-              </Text>
-              <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">{user.followers.length}</Text>
-                <Text>Followers</Text>
-              </VStack>
-              <Text fontSize="3xl" fontWeight="thin">
-                |
-              </Text>
-              <VStack alignItems="center" gap="-10px">
-                <Text fontSize="2xl">{user.follwings.length}</Text>
-                <Text>Followings</Text>
-              </VStack>
-            </HStack>
-
-            <Button
-              bg="accent.default"
-              width="full"
-              color="#000000"
-              size="sm"
-              borderRadius="sm"
-              mt={8}
-              _hover={{ bg: 'accent.event' }}
-              onClick={onOpen}
-            >
-              Edit Details
-            </Button>
+      <Flex direction={{ base: 'column', md: 'row' }} gap="10px">
+        <Box
+          display="flex"
+          alignItems="center"
+          flexDir="column"
+          bg="gray.dark"
+          p={6}
+          borderRadius="md"
+          border="1px"
+          borderColor="gray.light"
+        >
+          <Box position="relative">
+            <Avatar
+              size="2xl"
+              name={user.name}
+              src={user.profilePicture}
+              mb={3}
+            />
+            {/* <EditProfileButton /> */}
           </Box>
-        </Flex>
-      )}
+          <Text fontSize="2xl" fontWeight="medium">
+            {user.name}
+          </Text>
+          <Text color="gray.500">
+            {user.email} | {user.phone}
+          </Text>
+          <Text color="gray.500">
+            {user.address}, {user.city}, {user.state}
+          </Text>
+
+          <HStack alignItems="center" gap={4} my={6}>
+            <VStack alignItems="center" gap="-10px">
+              <Text fontSize="2xl">{user.points}</Text>
+              <Text>Points</Text>
+            </VStack>
+            <Text fontSize="3xl" fontWeight="thin">
+              |
+            </Text>
+            <VStack alignItems="center" gap="-10px">
+              <Text fontSize="2xl">{user.followers.length}</Text>
+              <Text>Followers</Text>
+            </VStack>
+            <Text fontSize="3xl" fontWeight="thin">
+              |
+            </Text>
+            <VStack alignItems="center" gap="-10px">
+              <Text fontSize="2xl">{user.follwings.length}</Text>
+              <Text>Followings</Text>
+            </VStack>
+          </HStack>
+
+          <Button
+            bg="accent.default"
+            width="full"
+            color="#000000"
+            size="sm"
+            borderRadius="sm"
+            mt={8}
+            _hover={{ bg: 'accent.event' }}
+            onClick={onOpen}
+          >
+            Edit Details
+          </Button>
+        </Box>
+        <Grid templateColumns="repeat(6, 1fr)" gap="32px" width="full">
+          <GridItem colSpan={{ base: 6, lg: 4 }}>
+            <SimpleGrid columns={4} gap={3}>
+              {!myBooks.length ? (
+                <Text fontSize="xl">No Books Added Yet</Text>
+              ) : (
+                myBooks.map((book) => <Book key={book.id} book={book} />)
+              )}
+            </SimpleGrid>
+          </GridItem>
+        </Grid>
+      </Flex>
     </>
   );
 };

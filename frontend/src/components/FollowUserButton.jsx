@@ -1,11 +1,11 @@
-import { Button, useToast } from "@chakra-ui/react";
+import { Button, useToast } from '@chakra-ui/react';
 import {
   useFollowUserMutation,
   useMyProfileQuery,
   useUnfollowUserMutation,
-} from "../slices/usersApiSlice";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+} from '../slices/usersApiSlice';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const FollowUserButton = ({ user, width }) => {
   const toast = useToast();
@@ -23,7 +23,7 @@ const FollowUserButton = ({ user, width }) => {
   const followHandler = async (e) => {
     e.preventDefault();
     if (!userInfo) {
-      navigate("/login");
+      navigate('/login');
       return;
     }
     try {
@@ -31,14 +31,14 @@ const FollowUserButton = ({ user, width }) => {
 
       toast({
         title: `You followed ${user.name}`,
-        status: "success",
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
     } catch (err) {
       toast({
         title: err?.data?.message || err?.error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -52,14 +52,14 @@ const FollowUserButton = ({ user, width }) => {
 
       toast({
         title: `You unfollowed ${user.name}`,
-        status: "success",
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
     } catch (err) {
       toast({
         title: err?.data?.message || err?.error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -73,11 +73,13 @@ const FollowUserButton = ({ user, width }) => {
           borderRadius="sm"
           size="sm"
           bg="accent.light"
-          _hover={{ bg: "accent.event" }}
+          _hover={{ bg: 'accent.event' }}
           color="black"
           isLoading={loadingUnfollow}
           onClick={unfollowHandler}
           width={width}
+          fontSize="md"
+          fontWeight="medium"
         >
           Following
         </Button>
@@ -86,11 +88,13 @@ const FollowUserButton = ({ user, width }) => {
           borderRadius="sm"
           size="sm"
           bg="accent.default"
-          _hover={{ bg: "accent.event" }}
+          _hover={{ bg: 'accent.event' }}
           color="black"
           isLoading={loadingFollow}
           onClick={followHandler}
           width={width}
+          fontSize="md"
+          fontWeight="medium"
         >
           Follow
         </Button>

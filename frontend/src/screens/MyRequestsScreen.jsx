@@ -13,13 +13,13 @@ import {
   Button,
   useToast,
   Text,
-} from "@chakra-ui/react";
-import { HiTrash, HiXMark } from "react-icons/hi2";
+} from '@chakra-ui/react';
+import { HiTrash, HiXMark } from 'react-icons/hi2';
 import {
   useCancelRequestMutation,
   useGetMyRequestsQuery,
-} from "../slices/requestsApiSlice";
-import { Link, useNavigate } from "react-router-dom";
+} from '../slices/requestsApiSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const MyRequestsScreen = () => {
   const toast = useToast();
@@ -31,11 +31,11 @@ const MyRequestsScreen = () => {
 
   const cancelHandler = async (bookId) => {
     try {
-      if (window.confirm("Are you sure?")) {
+      if (window.confirm('Are you sure?')) {
         await cancelRequest(bookId).unwrap();
         toast({
-          title: "Request canceled",
-          status: "success",
+          title: 'Request canceled',
+          status: 'success',
           duration: 3000,
           isClosable: true,
         });
@@ -43,7 +43,7 @@ const MyRequestsScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -58,7 +58,7 @@ const MyRequestsScreen = () => {
         My Requests
       </Text>
       <TableContainer>
-        <Table variant="striped" colorScheme="gray">
+        <Table size="md" className="adminTable">
           <Thead>
             <Tr>
               <Th></Th>
@@ -85,14 +85,14 @@ const MyRequestsScreen = () => {
                 <Td>{bookRequest.createdAt.substring(0, 10)}</Td>
                 <Td>
                   <Flex gap={2} alignItems="center">
-                    <Text color={"accent.event"}>
-                      {bookRequest.isAccepted ? "Accepted" : ""}
+                    <Text color={'accent.event'}>
+                      {bookRequest.isAccepted ? 'Accepted' : ''}
                     </Text>
                     <Button
                       borderRadius="sm"
                       size="sm"
                       bg="danger.default"
-                      _hover={{ bg: "danger.event" }}
+                      _hover={{ bg: 'danger.event' }}
                       color="black"
                       isLoading={loadingReject}
                       onClick={() => cancelHandler(bookRequest._id)}
@@ -105,7 +105,7 @@ const MyRequestsScreen = () => {
                       borderRadius="sm"
                       size="sm"
                       bg="white"
-                      _hover={{ bg: "gray.200" }}
+                      _hover={{ bg: 'gray.200' }}
                       color="black"
                       onClick={() => navigate(`/requests/${bookRequest._id}`)}
                     >

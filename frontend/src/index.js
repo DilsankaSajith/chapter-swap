@@ -62,6 +62,9 @@ const theme = extendTheme({
   config,
   styles,
   colors,
+  fonts: {
+    body: `'Recursive', sans-serif`,
+  },
 });
 
 const router = createBrowserRouter(

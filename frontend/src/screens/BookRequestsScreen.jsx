@@ -13,14 +13,14 @@ import {
   Button,
   useToast,
   Text,
-} from "@chakra-ui/react";
-import { HiCheck, HiTrash, HiXMark } from "react-icons/hi2";
+} from '@chakra-ui/react';
+import { HiCheck, HiTrash, HiXMark } from 'react-icons/hi2';
 import {
   useAcceptRequestMutation,
   useGetRequestsForMeQuery,
   useRejectRequestMutation,
-} from "../slices/requestsApiSlice";
-import { Link, useNavigate } from "react-router-dom";
+} from '../slices/requestsApiSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const BookRequestsScreen = () => {
   const toast = useToast();
@@ -34,11 +34,11 @@ const BookRequestsScreen = () => {
 
   const acceptHandler = async (bookId) => {
     try {
-      if (window.confirm("Are you sure?")) {
+      if (window.confirm('Are you sure?')) {
         await acceptRequest(bookId).unwrap();
         toast({
-          title: "Request accepted",
-          status: "success",
+          title: 'Request accepted',
+          status: 'success',
           duration: 3000,
           isClosable: true,
         });
@@ -46,7 +46,7 @@ const BookRequestsScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -55,11 +55,11 @@ const BookRequestsScreen = () => {
 
   const rejectHandler = async (bookId) => {
     try {
-      if (window.confirm("Are you sure?")) {
+      if (window.confirm('Are you sure?')) {
         await rejectRequest(bookId).unwrap();
         toast({
-          title: "Request rejected",
-          status: "success",
+          title: 'Request rejected',
+          status: 'success',
           duration: 3000,
           isClosable: true,
         });
@@ -67,7 +67,7 @@ const BookRequestsScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -82,12 +82,12 @@ const BookRequestsScreen = () => {
         Requests for Me
       </Text>
       <TableContainer>
-        <Table variant="striped" colorScheme="gray">
+        <Table size="sm" className="adminTable">
           <Thead>
             <Tr>
               <Th></Th>
               <Th>title</Th>
-              <Th>user</Th>
+              <Th>Requested by</Th>
               <Th>date</Th>
               <Th></Th>
             </Tr>
@@ -102,31 +102,40 @@ const BookRequestsScreen = () => {
                 </Td>
                 <Td>
                   <Link to={`/book/${bookRequest.book._id}`}>
-                    <LinkUI>{bookRequest.book.title}</LinkUI>
+                    {bookRequest.book.title}
                   </Link>
                 </Td>
-                <Td>{bookRequest.user.name}</Td>
+                <Td>
+                  <Link to={`/profile/${bookRequest.user._id}`}>
+                    <div className="flex flex-col items-start align-left">
+                      <span className="font-medium">
+                        {bookRequest.user.name}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {bookRequest.user.email}
+                      </span>
+                    </div>
+                  </Link>
+                </Td>
                 <Td>{bookRequest.createdAt.substring(0, 10)}</Td>
                 <Td>
                   <Flex gap={2}>
                     <Button
                       borderRadius="sm"
                       size="sm"
-                      bg="accent.default"
-                      _hover={{ bg: "accent.event" }}
-                      color="black"
                       isLoading={loadingAccept}
                       onClick={() => acceptHandler(bookRequest._id)}
-                      leftIcon={<HiCheck />}
+                      variant={bookRequest.isAccepted ? '' : 'ghost'}
+                      bg={bookRequest.isAccepted ? 'accent.default' : ''}
                     >
-                      {bookRequest.isAccepted ? "Accepted" : "Accept"}
+                      {bookRequest.isAccepted ? 'Accepted' : 'Accept'}
                     </Button>
 
                     <Button
                       borderRadius="sm"
                       size="sm"
                       bg="danger.default"
-                      _hover={{ bg: "danger.event" }}
+                      _hover={{ bg: 'danger.event' }}
                       color="black"
                       isLoading={loadingReject}
                       onClick={() => rejectHandler(bookRequest._id)}
@@ -139,7 +148,7 @@ const BookRequestsScreen = () => {
                       borderRadius="sm"
                       size="sm"
                       bg="white"
-                      _hover={{ bg: "gray.200" }}
+                      _hover={{ bg: 'gray.200' }}
                       color="black"
                       onClick={() => navigate(`/requests/${bookRequest._id}`)}
                     >

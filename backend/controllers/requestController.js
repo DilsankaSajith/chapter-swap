@@ -79,7 +79,7 @@ export const getMyRequests = asyncHandler(async (req, res) => {
 export const getRequestsForMe = asyncHandler(async (req, res) => {
   const requests = await Request.find({ owner: req.user._id })
     .populate('book', 'image title')
-    .populate('user', 'name')
+    .populate('user', 'name email')
     .sort({ createdAt: -1 });
   res.status(200).json(requests);
 });
@@ -93,6 +93,11 @@ export const updateRequestToArrived = asyncHandler(async (req, res) => {
   const owner = await User.findById(request.owner);
 
   if (request) {
+    if (request.isArrived) {
+      res.status(400);
+      throw new Error('Request already marked as arrived');
+    }
+
     if (!request.isAccepted) {
       res.status(400);
       throw new Error('You request is not accepted yet');

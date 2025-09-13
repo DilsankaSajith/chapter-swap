@@ -27,18 +27,18 @@ import {
   Stack,
   Heading,
   StackDivider,
-} from "@chakra-ui/react";
-import { HiBookmark, HiBookmarkSlash } from "react-icons/hi2";
+} from '@chakra-ui/react';
+import { HiBookmark, HiBookmarkSlash } from 'react-icons/hi2';
 import {
   useGetBookDetailsQuery,
   useCreateReviewMutation,
   useAddToFavoriteMutation,
-} from "../slices/booksApiSlice";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import Rating from "../components/Rating";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { useCreateRequestMutation } from "../slices/requestsApiSlice";
+} from '../slices/booksApiSlice';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import Rating from '../components/Rating';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useCreateRequestMutation } from '../slices/requestsApiSlice';
 
 const BookScreen = () => {
   const { userInfo } = useSelector((store) => store.auth);
@@ -50,10 +50,10 @@ const BookScreen = () => {
   const [city, setCity] = useState(userInfo.city);
   const [state, setState] = useState(userInfo.state);
   const [postalCode, setPostalCode] = useState(userInfo.postalCode);
-  const [country, setCountry] = useState("Sri lanka");
+  const [country, setCountry] = useState('Sri lanka');
   const [phone, setPhone] = useState(userInfo.phone);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
 
   const { id: bookId } = useParams();
 
@@ -87,7 +87,7 @@ const BookScreen = () => {
       const createdRequest = await createRequest(newRequest).unwrap();
       toast({
         title: `${book.title} requested`,
-        status: "success",
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -96,7 +96,7 @@ const BookScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -110,18 +110,18 @@ const BookScreen = () => {
     try {
       await createReview({ bookId, rating, comment }).unwrap();
       toast({
-        title: "Review submitted",
-        status: "success",
+        title: 'Review submitted',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
       refetch();
       setRating(0);
-      setComment("");
+      setComment('');
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -134,7 +134,7 @@ const BookScreen = () => {
     } catch (err) {
       toast({
         title: err?.data?.message || err.message,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -200,7 +200,7 @@ const BookScreen = () => {
               <VStack w="full" px="25px" pb="25px">
                 <Button
                   bg="accent.default"
-                  _hover={{ bg: "accent.event" }}
+                  _hover={{ bg: 'accent.event' }}
                   color="black"
                   w="full"
                   borderRadius="sm"
@@ -226,8 +226,8 @@ const BookScreen = () => {
             gap={8}
           >
             <Flex
-              direction={"column"}
-              alignItems={{ base: "center", md: "flex-start" }}
+              direction={'column'}
+              alignItems={{ base: 'center', md: 'flex-start' }}
               gap={4}
             >
               <Flex w="full" justifyContent="space-between">
@@ -244,7 +244,7 @@ const BookScreen = () => {
                     bg="accent.default"
                     borderRadius="full"
                     cursor="pointer"
-                    _hover={{ bg: "accent.event" }}
+                    _hover={{ bg: 'accent.event' }}
                     color="black"
                     transition="ease 0.2s"
                     onClick={addToFavorites}
@@ -261,7 +261,7 @@ const BookScreen = () => {
                     bg="accent.default"
                     borderRadius="full"
                     cursor="pointer"
-                    _hover={{ bg: "accent.event" }}
+                    _hover={{ bg: 'accent.event' }}
                     color="black"
                     transition="ease 0.2s"
                     onClick={addToFavorites}
@@ -302,7 +302,7 @@ const BookScreen = () => {
                       display="flex"
                       alignItems="center"
                       gap={2}
-                      _hover={{ bg: "gray.800" }}
+                      _hover={{ bg: 'gray.800' }}
                     >
                       <Avatar
                         size="xs"
@@ -328,7 +328,7 @@ const BookScreen = () => {
                         size="md"
                         width="150px"
                         borderRadius="sm"
-                        _hover={{ bg: "accent.event" }}
+                        _hover={{ bg: 'accent.event' }}
                         onClick={onOpen}
                       >
                         Request
@@ -339,11 +339,11 @@ const BookScreen = () => {
               </Box>
             </Flex>
             <Box
-              display={{ base: "block", md: "flex" }}
+              display={{ base: 'block', md: 'flex' }}
               alignItems="baseline"
               gap={6}
             >
-              <Box width={{ md: "50%" }}>
+              <Box width={{ md: '50%' }}>
                 <Text fontSize="2xl" fontWeight="medium">
                   Reviews
                 </Text>
@@ -377,7 +377,7 @@ const BookScreen = () => {
                   </Card>
                 )}
               </Box>
-              <Box width={{ md: "50%" }}>
+              <Box width={{ md: '50%' }}>
                 <Text fontSize="xl" fontWeight="medium" mt={6} mb={4}>
                   Write a review
                 </Text>
@@ -407,7 +407,7 @@ const BookScreen = () => {
                     <Button
                       mt={3}
                       bg="accent.default"
-                      _hover={{ bg: "accent.event" }}
+                      _hover={{ bg: 'accent.event' }}
                       color="black"
                       w="full"
                       borderRadius="sm"

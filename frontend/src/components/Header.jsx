@@ -46,7 +46,7 @@ const Header = () => {
       <Container maxWidth="6xl" py="2">
         <Flex alignItems="center" justifyContent="space-between">
           <Link to="/">
-            <Text fontSize="xl" fontWeight="bold">
+            <Text fontSize="xl" fontWeight="semibold">
               Chapter<span className="text-[#20B46A]">Swap</span>
             </Text>
           </Link>
@@ -130,6 +130,9 @@ const Header = () => {
                       src={userInfo?.profilePicture}
                     />
                     <Text>{userInfo.name}</Text>
+                    <Badge colorScheme="green">
+                      <span className="text-md">{userInfo.points}</span>
+                    </Badge>
                   </Flex>
                 </MenuButton>
                 <MenuList>

@@ -175,7 +175,6 @@ const Book = ({ book }) => {
               fontWeight="normal"
               fontSize="sm"
               mt="2"
-              fontFamily="Joan"
               letterSpacing="1px"
               isTruncated
             >

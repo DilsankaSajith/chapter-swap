@@ -326,8 +326,8 @@ const HomeScreen = () => {
             </GridItem>
 
             <GridItem colSpan={{ base: 6, lg: 3 }}>
-              <ImageSlider />
-              <SimpleGrid columns={{ base: 4, lg: 4 }} gap={3}>
+              <ImageSlider books={books} />
+              <SimpleGrid columns={{ base: 4, lg: 4 }} gap={3} mt={2}>
                 {!books.length ? (
                   <Text fontSize="xl">No search results</Text>
                 ) : (

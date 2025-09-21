@@ -36,9 +36,7 @@ const Notification = () => {
 
   return (
     <Menu>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
+      {isLoading ? null : (
         <>
           <MenuButton
             position="relative"
